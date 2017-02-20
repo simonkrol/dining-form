@@ -1,0 +1,113 @@
+Request URL:http://dining.carleton.ca/locations/fresh-food-company/
+Request Method:POST
+Status Code:302 Found
+Remote Address:134.117.6.42:80
+Response Headers
+view source
+Connection:Keep-Alive
+Content-Encoding:gzip
+Content-Length:20
+Content-Type:text/html; charset=UTF-8
+Date:Mon, 20 Feb 2017 05:05:00 GMT
+Keep-Alive:timeout=5, max=100
+Location:http://dining.carleton.ca/locations/fresh-food-company/
+Server:Apache
+Vary:Accept-Encoding
+X-Powered-By:PHP/5.3.3
+Request Headers
+view source
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+Accept-Encoding:gzip, deflate
+Accept-Language:en-US,en;q=0.8
+Cache-Control:max-age=0
+Connection:keep-alive
+Content-Length:2175
+Content-Type:multipart/form-data; boundary=----WebKitFormBoundaryUxlUYr3RONcoGwgz
+Cookie:km_ai=Pu10DNMPM4quqAVGLRSAAsJHDRI%3D; km_lv=x; km_uq=; optimizelyEndUserId=oeu1481075049526r0.11939414674792026; optimizelySegments=%7B%7D; optimizelyBuckets=%7B%7D; mp_fe42a3507c097e9a9d1e9f881d833cfb_mixpanel=%7B%22distinct_id%22%3A%20%22158d6f3cbd9158-0fd4e28089dd19-5c4f231c-1fa400-158d6f3cbda284%22%2C%22%24initial_referrer%22%3A%20%22%24direct%22%2C%22%24initial_referring_domain%22%3A%20%22%24direct%22%7D; __utma=220246410.475788544.1455748795.1487308292.1487365325.160; __utmz=220246410.1484840641.126.12.utmcsr=culearn.carleton.ca|utmccn=(referral)|utmcmd=referral|utmcct=/moodle/my/; _ga=GA1.2.475788544.1455748795; _gali=gform_submit_button_3
+Host:dining.carleton.ca
+Origin:http://dining.carleton.ca
+Referer:http://dining.carleton.ca/locations/fresh-food-company/
+Upgrade-Insecure-Requests:1
+User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36
+Request Payload
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_1.3"
+
+Email
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_1.6"
+
+Test
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_2"
+
+100000000
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_3"
+
+6131000000
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_4"
+
+redstonewarlock@gmail.com
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_5"
+
+02/02/2017
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_6"
+
+Lunch
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_15"
+
+Fruit cup
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_16"
+
+Orange Juice
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_17"
+
+Caesar
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_18"
+
+Corn Beef
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_19"
+
+Granola Bar
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="input_20"
+
+
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="is_submit_3"
+
+1
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="gform_submit"
+
+3
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="gform_unique_id"
+
+
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="state_3"
+
+WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0=
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="gform_target_page_number_3"
+
+0
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="gform_source_page_number_3"
+
+1
+------WebKitFormBoundaryUxlUYr3RONcoGwgz
+Content-Disposition: form-data; name="gform_field_values"
+
+
+------WebKitFormBoundaryUxlUYr3RONcoGwgz--
