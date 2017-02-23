@@ -3,7 +3,7 @@ import requests
 
 
 url = 'http://dining.carleton.ca/locations/fresh-food-company/' # Set destination URL here
-post_fields = {
+"""post_fields = {
 	'input_1.3': 'Redstone',
 	'input_1.6': 'Warlock',
 	'input_2': '100000000',
@@ -24,6 +24,12 @@ post_fields = {
 	'gform_target_page_number_3': '0',
 	'gform_source_page_number_3': '1',
 	'gform_field_values':'' 
-}     # Set POST fields here
+}     # Set POST fields here"""
+def read_from_file():
+	infile=open('meals', 'r')
+	for line in infile:
+		split=line.split()
+		post_fields[split[0]][split[1]=split[2]#To be transferred to a list value
 
+post_fields[input_1.3]
 r=requests.post(url, data=post_fields)
