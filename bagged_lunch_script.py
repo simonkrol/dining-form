@@ -76,14 +76,19 @@ def get_info():
 	info['input_1.6']=input("Last Name:")
 	info['input_2']=input("Student Number:")
 	info['input_3']=input("Phone Number:")
-	info['input_4']=input("Email adress:")
+	info['input_4']=input("Email address:")
 	cls()
 	return info
 
+def order_meal(info, meals):
+	date={'input_5': input("Date of meal(mm/dd/yyyy):")}
+	mealnum=int(input("Which meal would you like(#)"))
+	fields={**meals[mealnum], **date, **info}
+	r=requests.post(url, data=fields)
 
 def main():
 	cls()
-	get_info()
+	info=get_info()
 	s_meals=read_meals()
 	while(True):
 		choice=int(input("Press 1 to add a meal, 2 to print current meals, or 3 to order a meal:"))
@@ -94,7 +99,7 @@ def main():
 		elif(choice==2):
 			print_meals(s_meals)
 		elif(choice==3):
-			pass#order_meal()
+			order_meal(info, s_meals)
 		else:
 			print("Invalid option, please try again")
 def cls():
