@@ -16,6 +16,7 @@ Add a Tkinter Meal Creation GUI to the Calendar GUI
 Block the requesting of meals that have already been requested
 Condense the stored meal information
 Allow for the editing and deleting of meals
+Store user info in editable sidebar
 
 (It is currently midterm season so progress may be slower than normal)
 Version 1.1

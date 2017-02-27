@@ -4,15 +4,15 @@ import os
 
 
 url = 'http://dining.carleton.ca/locations/fresh-food-company/' # Set destination URL here
+#Read all meals from meals.dat abd return a list containing the meals
 def read_meals():
 	try:
-		open('meals.txt', 'x')
+		open('meals.dat', 'x')
 	except OSError as e:
 		pass
-	infile=open('meals.txt', 'r')
+	infile=open('meals.dat', 'r')
 	saved_meals=[]
 	meal={}
-	#meal={'input_1.3': fname, 'input_1.6': lname, 'input_2': sn, 'input_3': pn, 'input_4': em}
 	for line in infile:
 		split=line.split()
 		if(split[0]=='____'):
@@ -22,7 +22,7 @@ def read_meals():
 			meal[split[0]]=' '.join(split[1:len(split)])
 	return saved_meals
 
-
+#Allow user to input a new meal
 def add_new_meal():
 	new_meal={}
 	while(True):
@@ -42,7 +42,7 @@ def add_new_meal():
 	cls()
 	write_meal(new_meal)
 
-
+#Never called from console, used to write a new meal to the resource file after it has been added by the user
 def write_meal(new_meal):
 	try:
 		open('meals.txt', 'x')
@@ -59,17 +59,20 @@ def write_meal(new_meal):
 	infile.write("state_3 WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0=\n")
 	infile.write("____")
 
+#Prints all current meals to the console
 def print_meals(meals):
 	for meal in meals:
 		print("Meal #", meals.index(meal), "(", meal['input_6'], "):")
 		for key in meal:
-			if(key[:2]=="in" and key != "input_6"):
+			if(key=='input_20' and meal[key]==''):
+				print("No special requests")
+			elif(key[:2]=="in" and key != "input_6"):
 				print(meal[key])
 		print("\n")
 
 
 
-#read_meals()
+#Prompt the user to enter the identifying info required to submit a meal request
 def get_info():
 	info={}
 	info['input_1.3']=input("First Name:")
@@ -80,12 +83,14 @@ def get_info():
 	cls()
 	return info
 
+#Prompt the user for date and meal number and send the post request to the Fresh Food Company's server
 def order_meal(info, meals):
 	date={'input_5': input("Date of meal(mm/dd/yyyy):")}
 	mealnum=int(input("Which meal would you like(#)"))
 	fields={**meals[mealnum], **date, **info}
 	r=requests.post(url, data=fields)
 
+#Main, called upon startup
 def main():
 	cls()
 	info=get_info()
@@ -102,6 +107,8 @@ def main():
 			order_meal(info, s_meals)
 		else:
 			print("Invalid option, please try again")
+
+#Clear the console to improve legibitily
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
