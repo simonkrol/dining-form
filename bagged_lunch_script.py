@@ -45,10 +45,10 @@ def add_new_meal():
 #Never called from console, used to write a new meal to the resource file after it has been added by the user
 def write_meal(new_meal):
 	try:
-		open('meals.txt', 'x')
+		open('meals.dat', 'x')
 	except OSError as e:
 		pass
-	infile=open('meals.txt', 'a')
+	infile=open('meals.dat', 'a')
 	for key in new_meal:
 		infile.write("\n")
 		infile.write(key)
@@ -111,7 +111,6 @@ def main():
 #Clear the console to improve legibitily
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
-
 
 main()
 #r=requests.post(url, data=post_fields)
