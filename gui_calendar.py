@@ -3,7 +3,7 @@
 from tkinter import ttk
 import calendar
 import tkinter
-
+import random
 
 def get_calendar(locale, fwday):
 	# instantiate proper calendar class
@@ -129,7 +129,7 @@ class Calendar(ttk.Frame):
 		canvas.text = canvas.create_text(0, 0, fill=sel_fg, anchor='w')
 
 		canvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(canvas))
-		self._calendar.bind('<Configure>', lambda evt: canvas.place_forget())
+		#self._calendar.bind('<Configure>', lambda evt: canvas.place_forget())
 		self._calendar.bind('<ButtonPress-1>', self._pressed)
 	
 	def __minsize(self, evt):
@@ -156,6 +156,7 @@ class Calendar(ttk.Frame):
 	def _show_selection(self, text, bbox):
 		"""Configure canvas for a new selection."""
 		print("showing selection")
+		
 		x, y, width, height = bbox
 
 		textw = self._font.measure(text)
@@ -164,8 +165,8 @@ class Calendar(ttk.Frame):
 		canvas.configure(width=width, height=height)
 		canvas.coords(canvas.text, width - textw, height / 2 - 1)
 		canvas.itemconfigure(canvas.text, text=text)
-
-		canvas.place(in_=self._calendar, x=x, y=y)
+		if(random.randint(1,10)>4):
+			canvas.place(in_=self._calendar, x=x, y=y)
 
 	# Callbacks
 
