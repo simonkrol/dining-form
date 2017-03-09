@@ -17,6 +17,9 @@ class Calendar(ttk.Frame):
 
 	datetime = calendar.datetime.datetime
 	timedelta = calendar.datetime.timedelta
+	sel_bg=None
+	sel_fg=None
+	days=[]
 
 	def __init__(self, master=None, **kw):
 		"""
@@ -30,8 +33,8 @@ class Calendar(ttk.Frame):
 		year = kw.pop('year', self.datetime.now().year)
 		month = kw.pop('month', self.datetime.now().month)
 		locale = kw.pop('locale', None)
-		sel_bg = kw.pop('selectbackground', '#ecffc4')
-		sel_fg = kw.pop('selectforeground', '#05640e')
+		self.sel_bg = kw.pop('selectbackground', '#ecffc4')
+		self.sel_fg = kw.pop('selectforeground', '#05640e')
 
 		self._date = self.datetime(year, month, 1)
 		self._selection = None # no date selected
@@ -44,7 +47,7 @@ class Calendar(ttk.Frame):
 		self.__place_widgets()	  # pack/grid used widgets
 		self.__config_calendar()	# adjust calendar columns and setup tags
 		# configure a canvas, and proper bindings, for selecting dates
-		self.__setup_selection(sel_bg, sel_fg)
+		self.__setup_selection(self.sel_bg, self.sel_fg)
 
 		# store items ids, used for insertion later
 		self._items = [self._calendar.insert('', 'end', values='')
@@ -129,7 +132,7 @@ class Calendar(ttk.Frame):
 		canvas.text = canvas.create_text(0, 0, fill=sel_fg, anchor='w')
 
 		canvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(canvas))
-		#self._calendar.bind('<Configure>', lambda evt: canvas.place_forget())
+		self._calendar.bind('<Configure>', lambda evt: canvas.place_forget())
 		self._calendar.bind('<ButtonPress-1>', self._pressed)
 	
 	def __minsize(self, evt):
@@ -156,17 +159,18 @@ class Calendar(ttk.Frame):
 	def _show_selection(self, text, bbox):
 		"""Configure canvas for a new selection."""
 		print("showing selection")
-		
+
+		newcanvas = tkinter.Canvas(self._calendar,
+		background=self.sel_bg, borderwidth=0, highlightthickness=0)
+		newcanvas.text = newcanvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
 		x, y, width, height = bbox
 
 		textw = self._font.measure(text)
-
-		canvas = self._canvas
-		canvas.configure(width=width, height=height)
-		canvas.coords(canvas.text, width - textw, height / 2 - 1)
-		canvas.itemconfigure(canvas.text, text=text)
-		if(random.randint(1,10)>4):
-			canvas.place(in_=self._calendar, x=x, y=y)
+		canvas=self._canvas
+		newcanvas.configure(width=width, height=height)
+		newcanvas.coords(canvas.text, width - textw, height / 2 - 1)
+		newcanvas.itemconfigure(canvas.text, text=text)
+		newcanvas.place(in_=self._calendar, x=x, y=y)
 
 	# Callbacks
 
@@ -204,6 +208,7 @@ class Calendar(ttk.Frame):
 		else:
 			print("selection = new selection")
 			self._selection = (text, item, column)
+			self.addday()
 		self._show_selection(text, bbox)
 
 
@@ -239,3 +244,11 @@ class Calendar(ttk.Frame):
 		print(self._selection)
 		year, month = self._date.year, self._date.month
 		return self.datetime(year, month, int(self._selection[0]))
+	def addday(self):
+		if(self._date.month<10):
+			month=("0%i" %self._date.month)
+		else:
+			month=("%i" %self._date.month)
+		newday=("%s/%s/%i" %(month, self._selection[0], self._date.year))
+		self.days.append(newday)
+		print(self.days)
