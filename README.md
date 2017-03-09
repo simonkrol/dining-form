@@ -17,6 +17,7 @@ Block the requesting of meals that have already been requested
 Condense the stored meal information
 Allow for the editing and deleting of meals
 Store user info in editable sidebar
-
+Store user meals and retrieve them upon startup to block dates
+-Send out email reminders when you need to pick up bagged lunches
 (It is currently midterm season so progress may be slower than normal)
 Version 1.1
