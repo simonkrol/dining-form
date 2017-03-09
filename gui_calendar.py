@@ -13,7 +13,7 @@ def get_calendar(locale, fwday):
 		return calendar.LocaleTextCalendar(fwday, locale)
 
 class Calendar(ttk.Frame):
-	# XXX ToDo: cget and configure
+
 
 	datetime = calendar.datetime.datetime
 	timedelta = calendar.datetime.timedelta
@@ -27,7 +27,7 @@ class Calendar(ttk.Frame):
 		"""
 		# remove custom options from kw before initializating ttk.Frame
 		fwday = kw.pop('firstweekday', calendar.MONDAY)
-		year = kw.pop('year', 1900)
+		year = kw.pop('year', self.datetime.now().year)
 		month = kw.pop('month', self.datetime.now().month)
 		locale = kw.pop('locale', None)
 		sel_bg = kw.pop('selectbackground', '#ecffc4')
@@ -56,6 +56,7 @@ class Calendar(ttk.Frame):
 		self._calendar.bind('<Map>', self.__minsize)
 
 	def __setitem__(self, item, value):
+		print("setitem")
 		if item in ('year', 'month'):
 			raise AttributeError("attribute '%s' is not writeable" % item)
 		elif item == 'selectbackground':
@@ -66,6 +67,7 @@ class Calendar(ttk.Frame):
 			ttk.Frame.__setitem__(self, item, value)
 
 	def __getitem__(self, item):
+		print("getitem")
 		if item in ('year', 'month'):
 			return getattr(self._date, item)
 		elif item == 'selectbackground':
@@ -77,6 +79,7 @@ class Calendar(ttk.Frame):
 			return r[item]
 
 	def __setup_styles(self):
+		print("setupstyles")
 		# custom ttk styles
 		style = ttk.Style(self.master)
 		arrow_layout = lambda dir: (
@@ -86,6 +89,7 @@ class Calendar(ttk.Frame):
 		style.layout('R.TButton', arrow_layout('right'))
 
 	def __place_widgets(self):
+		print("placewidgets")
 		# header frame and its widgets
 		hframe = ttk.Frame(self)
 		lbtn = ttk.Button(hframe, style='L.TButton', command=self._prev_month)
@@ -102,6 +106,7 @@ class Calendar(ttk.Frame):
 		self._calendar.pack(in_=self, expand=1, fill='both', side='bottom')
 
 	def __config_calendar(self):
+		print("configcalendar")
 		cols = self._cal.formatweekheader(3).split()
 		self._calendar['columns'] = cols
 		self._calendar.tag_configure('header', background='grey90')
@@ -112,23 +117,29 @@ class Calendar(ttk.Frame):
 		for col in cols:
 			self._calendar.column(col, width=maxwidth, minwidth=maxwidth,
 				anchor='e')
-
+	def _unpressed(self, canvas):
+			self._selection=None
+			print("unpressed!")
+			canvas.place_forget()
 	def __setup_selection(self, sel_bg, sel_fg):
+		print("setup selection")
 		self._font = tkinter.font.Font()
 		self._canvas = canvas = tkinter.Canvas(self._calendar,
 			background=sel_bg, borderwidth=0, highlightthickness=0)
 		canvas.text = canvas.create_text(0, 0, fill=sel_fg, anchor='w')
 
-		canvas.bind('<ButtonPress-1>', lambda evt: canvas.place_forget())
+		canvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(canvas))
 		self._calendar.bind('<Configure>', lambda evt: canvas.place_forget())
 		self._calendar.bind('<ButtonPress-1>', self._pressed)
-
+	
 	def __minsize(self, evt):
+		print("minsize")
 		width, height = self._calendar.master.geometry().split('x')
 		height = height[:height.index('+')]
 		self._calendar.master.minsize(width, height)
 
 	def _build_calendar(self):
+		print("buildcalendar")
 		year, month = self._date.year, self._date.month
 
 		# update header text (Month, YEAR)
@@ -144,6 +155,7 @@ class Calendar(ttk.Frame):
 
 	def _show_selection(self, text, bbox):
 		"""Configure canvas for a new selection."""
+		print("showing selection")
 		x, y, width, height = bbox
 
 		textw = self._font.measure(text)
@@ -152,6 +164,7 @@ class Calendar(ttk.Frame):
 		canvas.configure(width=width, height=height)
 		canvas.coords(canvas.text, width - textw, height / 2 - 1)
 		canvas.itemconfigure(canvas.text, text=text)
+
 		canvas.place(in_=self._calendar, x=x, y=y)
 
 	# Callbacks
@@ -161,29 +174,40 @@ class Calendar(ttk.Frame):
 		x, y, widget = evt.x, evt.y, evt.widget
 		item = widget.identify_row(y)
 		column = widget.identify_column(x)
-
+		print("into pressed")
 		if not column or not item in self._items:
 			# clicked in the weekdays row or just outside the columns
+			print("returned 1")
 			return
 
 		item_values = widget.item(item)['values']
 		if not len(item_values): # row is empty for this month
+			print("returned 2")
 			return
 
 		text = item_values[int(column[1]) - 1]
 		if not text: # date is empty
+			print("returned 3")
 			return
 
 		bbox = widget.bbox(item, column)
 		if not bbox: # calendar not visible yet
+			print("returned 4")
 			return
 
 		# update and then show selection
 		text = '%02d' % text
-		self._selection = (text, item, column)
+		if(self._selection == (text, item, column)):
+			print("selection not = new selection")
+			self._selection=None
+		else:
+			print("selection = new selection")
+			self._selection = (text, item, column)
 		self._show_selection(text, bbox)
 
+
 	def _prev_month(self):
+		print("prevmonth")
 		"""Updated calendar to show the previous month."""
 		self._canvas.place_forget()
 
@@ -192,6 +216,7 @@ class Calendar(ttk.Frame):
 		self._build_calendar() # reconstuct calendar
 
 	def _next_month(self):
+		print("nextmonth")
 		"""Update calendar to show the next month."""
 		self._canvas.place_forget()
 
@@ -205,9 +230,11 @@ class Calendar(ttk.Frame):
 
 	@property
 	def selection(self):
+		print("selection")
 		"""Return a datetime representing the current selected date."""
 		if not self._selection:
+			print(self._selection)	
 			return None
-
+		print(self._selection)
 		year, month = self._date.year, self._date.month
 		return self.datetime(year, month, int(self._selection[0]))
