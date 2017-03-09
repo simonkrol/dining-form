@@ -237,13 +237,12 @@ class Calendar(ttk.Frame):
 	@property
 	def selection(self):
 		print("selection")
-		"""Return a datetime representing the current selected date."""
-		if not self._selection:
-			print(self._selection)	
+		"""Return a datetime representing all currently selected days"""
+		if not self._selection:	
 			return None
 		print(self._selection)
 		year, month = self._date.year, self._date.month
-		return self.datetime(year, month, int(self._selection[0]))
+		return self.days
 	def addday(self):
 		if(self._date.month<10):
 			month=("0%i" %self._date.month)
