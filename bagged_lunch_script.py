@@ -15,7 +15,7 @@ def read_meals():
 	meal={}
 	for line in infile:
 		split=line.split()
-		if(split[0]=='____'):
+		if(split[0]=='____'):	
 			saved_meals.append(meal)
 			meal=dict()
 		else:
@@ -50,14 +50,11 @@ def write_meal(new_meal):
 		pass
 	infile=open('meals.dat', 'a')
 	for key in new_meal:
-		infile.write("\n")
 		infile.write(key)
 		infile.write(" ")
 		infile.write(new_meal[key])
-	infile.write("\nis_submit_3 1\n")
-	infile.write("gform_submit 3\n")
-	infile.write("state_3 WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0=\n")
-	infile.write("____")
+		infile.write("\n")
+	infile.write("____\n")
 
 #Prints all current meals to the console
 def print_meals(meals):
@@ -87,7 +84,9 @@ def get_info():
 def order_meal(info, meals):
 	date={'input_5': input("Date of meal(mm/dd/yyyy):")}
 	mealnum=int(input("Which meal would you like(#)"))
-	fields={**meals[mealnum], **date, **info}
+	keys={'is_submit_3':'1', 'gform_submit':'3', 'state_3':'WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0='}
+	fields={**meals[mealnum], **date, **info, **keys}
+	print(fields)
 	r=requests.post(url, data=fields)
 
 #Main, called upon startup
@@ -110,7 +109,7 @@ def main():
 
 #Clear the console to improve legibitily
 def cls():
-    os.system('cls' if os.name=='nt' else 'clear')
+	os.system('cls' if os.name=='nt' else 'clear')
 
 main()
 #r=requests.post(url, data=post_fields)
