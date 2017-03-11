@@ -2,11 +2,13 @@ import tkinter as tk
 
 class InfoGUI(tk.Tk):
 	"""docstring for Values"""
-	def __init__(self, parent, values):
+	def __init__(self, parent, upperparent):
 		tk.Tk.__init__(self, parent)
-		self.parent = parent
-		self.values=values
+		self.parent=parent
+		self.bind('<Return>', self.submit)
 		self.initialize()
+		self.upperparent=upperparent
+		self.keyorder=['input_1.3', 'input_1.6', 'input_2', 'input_3', 'input_4']
 
 	def initialize(self):
 		self.grid()
@@ -17,7 +19,7 @@ class InfoGUI(tk.Tk):
 		self.vallbl=[]
 		self.valtxt=[]
 		self.val=[]
-
+		self.readInfo()
 		for i in range(len(labels)):
 			self.vallbl.append(tk.Label(stepOne, text=labels[i]))
 			self.vallbl[i].grid(row=i, column=0, sticky='E', padx=5, pady=2)
@@ -26,7 +28,8 @@ class InfoGUI(tk.Tk):
 			self.valtxt.append(tk.Entry(stepOne))
 			self.valtxt[i].grid(row=i, column=1, columnspan=3, pady=2, sticky='WE')
 			
-			self.valtxt[i].insert(0, self.values[i])
+			if(self.values[i]!=None):
+				self.valtxt[i].insert(0, self.values[i])
 			self.val.append(None)
 
 		ClearBtn = tk.Button(stepOne, text="Clear", command=self.clear)
@@ -34,16 +37,44 @@ class InfoGUI(tk.Tk):
 		SubmitBtn = tk.Button(stepOne, text="Submit",command=self.submit)
 		SubmitBtn.grid(row=len(labels), column=3, sticky='W', padx=5, pady=2)
 
-	def submit(self):
+	def submit(self, event=None):
 		
 		for i in range(len(self.valtxt)):
 			
 			if(self.valtxt[i].get()!=""):
 				self.val[i]=(self.valtxt[i]).get()
+			else:
+				return
+		self.upperparent.deiconify()
+		self.writeInfo()
 		self.destroy()
+
 
 	def clear(self):
 		for i in range(len(self.valtxt)):
 			self.valtxt[i].delete(0, 100)
+	
+	def writeInfo(self):
 
+		self.val
+		try:
+			open('data/info.dat', 'x')
+		except OSError as e:
+			pass
+		infile=open('data/info.dat', 'w')
+		for i in range(len(self.val)):
+			infile.write(self.keyorder[i])
+			infile.write(' ')
+			infile.write(self.val[i])
+			infile.write("\n")
 
+	def readInfo(self):
+		try:
+			open('data/info.dat', 'x')
+		except OSError as e:
+			pass
+		infile=open('data/info.dat', 'r')
+		self.values=[]
+		for line in infile:
+			split=line.split()
+			self.values.append(split[1])

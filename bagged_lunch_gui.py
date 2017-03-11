@@ -81,6 +81,7 @@ and show meals on sidebar
 class MainApplication(tk.Frame):
 	def __init__(self, parent, *args, **kwargs):
 		tk.Frame.__init__(self, parent, *args, **kwargs)
+		#self.keyorder=['input_1.3', 'input_1.6', 'input_2', 'input_3', 'input_4']
 		self.parent = parent
 
 		self.parent.title("Calendar GUI")
@@ -99,26 +100,39 @@ class MainApplication(tk.Frame):
 			style = ttk.Style()
 			style.theme_use('clam')
 	def create_window(self):
-		values=['Simon', 'Krol', '101047304', '6134021404', 'simonkrol@cmail.carleton.ca']
-		self.window=InfoGUI(None, values)
+		
+
+		self.parent.withdraw()
+		self.window=InfoGUI(None, self.parent)
+
+	def readInfo(self):
+		try:
+			open('data/info.dat', 'x')
+		except OSError as e:
+			pass
+		infile=open('data/info.dat', 'r')
+		self.info={}
+		for line in infile:
+			split=line.split()
+			self.info[split[0]]=split[1]
 		
 
 	def send_request(self):	
 		print(self.window.val1)
-		# dates=(self.calendar.selection)
-		# if(dates==None):
-		# 	return
-		# print(dates)
-		# info=get_info()
-		# meal=get_meal()
-		# key=get_keys()
-		# date={'input_5': ""}
-		# payload={**info, **meal, **key, **date}
-		# for date in dates:
-		# 	payload['input_5']= date
-		# 	print("Order for: %s" %date)
+		dates=(self.calendar.selection)
+		if(dates==None):
+			return
+		print(dates)
+		info=get_info()
+		meal=get_meal()
+		key=get_keys()
+		date={'input_5': ""}
+		payload={**info, **meal, **key, **date}
+		for date in dates:
+			payload['input_5']= date
+			print("Order for: %s" %date)
 			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
-
+		
 
 if __name__ == "__main__":
 	root = tk.Tk()
