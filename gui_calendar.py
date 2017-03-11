@@ -17,8 +17,7 @@ class Calendar(ttk.Frame):
 
 	datetime = calendar.datetime.datetime
 	timedelta = calendar.datetime.timedelta
-	sel_bg=None
-	sel_fg=None
+	canvas={}
 	days=[]
 
 	def __init__(self, master=None, **kw):
@@ -47,7 +46,7 @@ class Calendar(ttk.Frame):
 		self.__place_widgets()	  # pack/grid used widgets
 		self.__config_calendar()	# adjust calendar columns and setup tags
 		# configure a canvas, and proper bindings, for selecting dates
-		self.__setup_selection(self.sel_bg, self.sel_fg)
+		self.__setup_selection()
 
 		# store items ids, used for insertion later
 		self._items = [self._calendar.insert('', 'end', values='')
@@ -62,10 +61,10 @@ class Calendar(ttk.Frame):
 		print("setitem")
 		if item in ('year', 'month'):
 			raise AttributeError("attribute '%s' is not writeable" % item)
-		elif item == 'selectbackground':
-			self._canvas['background'] = value
-		elif item == 'selectforeground':
-			self._canvas.itemconfigure(self._canvas.text, item=value)
+		#elif item == 'selectbackground':
+			#self._canvas['background'] = value
+		#elif item == 'selectforeground':
+			#self._canvas.itemconfigure(self._canvas.text, item=value)
 		else:
 			ttk.Frame.__setitem__(self, item, value)
 
@@ -73,10 +72,10 @@ class Calendar(ttk.Frame):
 		print("getitem")
 		if item in ('year', 'month'):
 			return getattr(self._date, item)
-		elif item == 'selectbackground':
-			return self._canvas['background']
-		elif item == 'selectforeground':
-			return self._canvas.itemcget(self._canvas.text, 'fill')
+		#elif item == 'selectbackground':
+			#return self._canvas['background']
+		#elif item == 'selectforeground':
+			#return self._canvas.itemcget(self._canvas.text, 'fill')
 		else:
 			r = ttk.tclobjs_to_py({item: ttk.Frame.__getitem__(self, item)})
 			return r[item]
@@ -120,19 +119,16 @@ class Calendar(ttk.Frame):
 		for col in cols:
 			self._calendar.column(col, width=maxwidth, minwidth=maxwidth,
 				anchor='e')
-	def _unpressed(self, canvas):
-			self._selection=None
-			print("unpressed!")
-			canvas.place_forget()
-	def __setup_selection(self, sel_bg, sel_fg):
+
+	def __setup_selection(self):
 		print("setup selection")
 		self._font = tkinter.font.Font()
-		self._canvas = canvas = tkinter.Canvas(self._calendar,
-			background=sel_bg, borderwidth=0, highlightthickness=0)
-		canvas.text = canvas.create_text(0, 0, fill=sel_fg, anchor='w')
+		#self._canvas = canvas = tkinter.Canvas(self._calendar,
+		#	background=self.sel_bg, borderwidth=0, highlightthickness=0)
+		#canvas.text = canvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
 
-		canvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(canvas))
-		self._calendar.bind('<Configure>', lambda evt: canvas.place_forget())
+		#canvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(canvas))
+		#self._calendar.bind('<Configure>', lambda evt: canvas.place_forget())
 		self._calendar.bind('<ButtonPress-1>', self._pressed)
 	
 	def __minsize(self, evt):
@@ -164,15 +160,24 @@ class Calendar(ttk.Frame):
 		background=self.sel_bg, borderwidth=0, highlightthickness=0)
 		newcanvas.text = newcanvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
 		x, y, width, height = bbox
+		
 
+		newcanvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(newcanvas))
 		textw = self._font.measure(text)
-		canvas=self._canvas
 		newcanvas.configure(width=width, height=height)
-		newcanvas.coords(canvas.text, width - textw, height / 2 - 1)
-		newcanvas.itemconfigure(canvas.text, text=text)
+		newcanvas.coords(newcanvas.text, width - textw, height / 2 - 1)
+		newcanvas.itemconfigure(newcanvas.text, text=text, tags=self.get_day)
 		newcanvas.place(in_=self._calendar, x=x, y=y)
-
+		newcanvas.addtag_all(self.get_day())
 	# Callbacks
+	def _unpressed(self, canvas):
+		#self.days.remove
+		print(canvas.gettags(canvas.text))
+		for tag in canvas.gettags(canvas.text):
+			if tag in self.days:
+				self.days.remove(tag)
+				canvas.place_forget()
+				return
 
 	def _pressed(self, evt):
 		"""Clicked somewhere in the calendar."""
@@ -208,14 +213,14 @@ class Calendar(ttk.Frame):
 		else:
 			print("selection = new selection")
 			self._selection = (text, item, column)
-			self.addday()
+			self.add_day()
 		self._show_selection(text, bbox)
 
 
 	def _prev_month(self):
 		print("prevmonth")
 		"""Updated calendar to show the previous month."""
-		self._canvas.place_forget()
+		#self._canvas.place_forget()
 
 		self._date = self._date - self.timedelta(days=1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
@@ -224,7 +229,7 @@ class Calendar(ttk.Frame):
 	def _next_month(self):
 		print("nextmonth")
 		"""Update calendar to show the next month."""
-		self._canvas.place_forget()
+		#self._canvas.place_forget()
 
 		year, month = self._date.year, self._date.month
 		self._date = self._date + self.timedelta(
@@ -236,18 +241,15 @@ class Calendar(ttk.Frame):
 
 	@property
 	def selection(self):
-		print("selection")
 		"""Return a datetime representing all currently selected days"""
-		if not self._selection:	
-			return None
-		print(self._selection)
-		year, month = self._date.year, self._date.month
 		return self.days
-	def addday(self):
+	def add_day(self):
 		if(self._date.month<10):
 			month=("0%i" %self._date.month)
 		else:
 			month=("%i" %self._date.month)
-		newday=("%s/%s/%i" %(month, self._selection[0], self._date.year))
+		newday=("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
 		self.days.append(newday)
 		print(self.days)
+	def get_day(self):
+		return ("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
