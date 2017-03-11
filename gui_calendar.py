@@ -155,7 +155,9 @@ class Calendar(ttk.Frame):
 	def _show_selection(self, text, bbox):
 		"""Configure canvas for a new selection."""
 		print("showing selection")
-
+		if(self._selection==None):
+			print("selection not made")
+			return
 		newcanvas = tkinter.Canvas(self._calendar,
 		background=self.sel_bg, borderwidth=0, highlightthickness=0)
 		newcanvas.text = newcanvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
