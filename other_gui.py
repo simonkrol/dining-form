@@ -67,6 +67,7 @@ class InfoGUI(tk.Tk):
 			infile.write(' ')
 			infile.write(self.val[i])
 			infile.write("\n")
+		infile.close()
 
 	def readInfo(self):
 		try:
@@ -78,3 +79,4 @@ class InfoGUI(tk.Tk):
 		for line in infile:
 			split=line.split()
 			self.values.append(split[1])
+		infile.close()

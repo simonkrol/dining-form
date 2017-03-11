@@ -18,6 +18,8 @@ Add multiclickable Calendar GUI (DONE)
 Add an Info GUI to the Calendar GUI (DONE)
 Add a Meal  GUI to the Calendar GUI
 Block the requesting of meals that have already been requested
+Prevent meals in the past from being ordered
+Remove dates stored in the past from dat file?
 Condense the stored meal information
 Store user meals and retrieve them upon startup to block dates
 -Send out email reminders when you need to pick up bagged lunches

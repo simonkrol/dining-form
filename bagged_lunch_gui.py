@@ -115,24 +115,34 @@ class MainApplication(tk.Frame):
 		for line in infile:
 			split=line.split()
 			self.info[split[0]]=split[1]
-		
+		infile.close()
 
 	def send_request(self):	
-		print(self.window.val1)
 		dates=(self.calendar.selection)
 		if(dates==None):
 			return
-		print(dates)
-		info=get_info()
-		meal=get_meal()
-		key=get_keys()
+		self.readInfo()
+		meal=dict()
+		key=self.get_keys()
 		date={'input_5': ""}
-		payload={**info, **meal, **key, **date}
+		payload={**self.info, **meal, **key, **date}
+		try:
+			open('data/dates.dat', 'x')
+		except OSError as e:
+			pass
+		infile=open('data/dates.dat', 'a')
+
 		for date in dates:
 			payload['input_5']= date
 			print("Order for: %s" %date)
+			infile.write(date)
+			infile.write("\n")
+		infile.close()
+
+
 			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
-		
+	def get_keys(self):
+		return {'is_submit_3':'1', 'gform_submit':'3', 'state_3':'WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0='}
 
 if __name__ == "__main__":
 	root = tk.Tk()
