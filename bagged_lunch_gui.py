@@ -99,26 +99,28 @@ class MainApplication(tk.Frame):
 			style = ttk.Style()
 			style.theme_use('clam')
 	def create_window(self):
-		self.window=InfoGUI(self.parent)
+		values=['Simon', 'Krol', '101047304', '6134021404', 'simonkrol@cmail.carleton.ca']
+		self.window=InfoGUI(None, values)
 		
 
 	def send_request(self):	
-		dates=(self.calendar.selection)
-		if(dates==None):
-			return
-		print(dates)
-		info=get_info()
-		meal=get_meal()
-		key=get_keys()
-		date={'input_5': ""}
-		payload={**info, **meal, **key, **date}
-		for date in dates:
-			payload['input_5']= date
-			print("Order for: %s" %date)
+		print(self.window.val1)
+		# dates=(self.calendar.selection)
+		# if(dates==None):
+		# 	return
+		# print(dates)
+		# info=get_info()
+		# meal=get_meal()
+		# key=get_keys()
+		# date={'input_5': ""}
+		# payload={**info, **meal, **key, **date}
+		# for date in dates:
+		# 	payload['input_5']= date
+		# 	print("Order for: %s" %date)
 			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    MainApplication(root).pack(side="top", fill="both", expand=True)
-    root.mainloop()
+	root = tk.Tk()
+	MainApplication(root).pack(side="top", fill="both", expand=True)
+	root.mainloop()
