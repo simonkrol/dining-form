@@ -100,7 +100,7 @@ class MainApplication(tk.Frame):
 			payload['input_5']= date
 			infile.write(date)
 			infile.write("\n")
-			r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
+			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
 		infile.close()
 
 

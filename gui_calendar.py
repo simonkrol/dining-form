@@ -57,6 +57,8 @@ class Calendar(ttk.Frame):
 		# set the minimal size for the widget
 		self._calendar.bind('<Map>', self.__minsize)
 
+		self.canvi=[]
+
 	def __setitem__(self, item, value):
 		if item in ('year', 'month'):
 			raise AttributeError("attribute '%s' is not writeable" % item)
@@ -154,8 +156,14 @@ class Calendar(ttk.Frame):
 		newcanvas.coords(newcanvas.text, width - textw, height / 2 - 1)
 		newcanvas.itemconfigure(newcanvas.text, text=text, tags=self.get_day)
 		newcanvas.place(in_=self._calendar, x=x, y=y)
+
 		newcanvas.addtag_all(self.get_day())
+		self.canvi.append(newcanvas)
 	# Callbacks
+	def deletecanvas(self):
+		for i in self.canvi:
+			i.place_forget()
+		self.days=[]
 	def _unpressed(self, canvas):
 		#self.days.remove
 		for tag in canvas.gettags(canvas.text):
@@ -197,6 +205,7 @@ class Calendar(ttk.Frame):
 
 
 	def _prev_month(self):
+		self.deletecanvas()
 		"""Updated calendar to show the previous month."""
 		#self._canvas.place_forget()
 
@@ -205,6 +214,7 @@ class Calendar(ttk.Frame):
 		self._build_calendar() # reconstuct calendar
 
 	def _next_month(self):
+		self.deletecanvas()
 		"""Update calendar to show the next month."""
 		#self._canvas.place_forget()
 
