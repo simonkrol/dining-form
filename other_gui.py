@@ -1,10 +1,11 @@
 import tkinter as tk
+import os
+import sys
 
 class InfoGUI(tk.Tk):
 	"""docstring for Values"""
 	def __init__(self, parent, upperparent):
 		tk.Tk.__init__(self, parent)
-		self.parent=parent
 		self.bind('<Return>', self.submit)
 		self.initialize()
 		self.upperparent=upperparent
@@ -27,10 +28,10 @@ class InfoGUI(tk.Tk):
 		
 			self.valtxt.append(tk.Entry(stepOne))
 			self.valtxt[i].grid(row=i, column=1, columnspan=3, pady=2, sticky='WE')
-			
-			if(self.values[i]!=None):
-				self.valtxt[i].insert(0, self.values[i])
-			self.val.append(None)
+			try:
+				self.valtxt[i].insert(0, self.val[i])
+			except:
+				pass
 
 		ClearBtn = tk.Button(stepOne, text="Clear", command=self.clear)
 		ClearBtn.grid(row=len(labels), column=2, sticky='W', padx=5, pady=2)
@@ -55,13 +56,7 @@ class InfoGUI(tk.Tk):
 			self.valtxt[i].delete(0, 100)
 	
 	def writeInfo(self):
-
-		self.val
-		try:
-			open('data/info.dat', 'x')
-		except OSError as e:
-			pass
-		infile=open('data/info.dat', 'w')
+		infile=open_data('data', 'info.dat', 'w')
 		for i in range(len(self.val)):
 			infile.write(self.keyorder[i])
 			infile.write(' ')
@@ -70,13 +65,26 @@ class InfoGUI(tk.Tk):
 		infile.close()
 
 	def readInfo(self):
-		try:
-			open('data/info.dat', 'x')
-		except OSError as e:
-			pass
-		infile=open('data/info.dat', 'r')
-		self.values=[]
+		infile=open_data('data', 'info.dat', 'r')
+		self.val=[]
 		for line in infile:
 			split=line.split()
-			self.values.append(split[1])
+			self.val.append(split[1])
 		infile.close()
+
+def open_data(dir_loc, file, opentype):
+	directory = ('%s\%s\%s' %(os.path.realpath('..'), 'dining form', dir_loc))
+	if not os.path.exists(directory):
+		print(directory)
+		os.makedirs(directory)
+	
+	else:
+		print(directory)
+		print (os.path.exists(directory))
+	location=('%s/%s' %(dir_loc, file))
+	try:
+		open(location, 'x')
+	except OSError as e:
+		pass
+	infile=open(location, opentype)
+	return infile
