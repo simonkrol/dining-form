@@ -34,16 +34,16 @@ class MainApplication(tk.Frame):
 		self.buttonFrame.grid(row=3)
 
 		MODES = [
-			("Breakfast", "1"),
-			("Lunch", "2"),
-			("Dinner", "3"),
+			("Breakfast", 1),
+			("Lunch", 2),
+			("Dinner", 3),
 		]
 
-		v = tk.StringVar()
-		v.set("1") # initialize
+		self.v = tk.StringVar()
+		self.v.set(1) # initialize
 
 		for text, mode in MODES:
-			b = tk.Radiobutton(self.radioFrame, text=text, variable=v, value=mode, indicatoron=0)
+			b = tk.Radiobutton(self.radioFrame, text=text, variable=self.v, value=mode, indicatoron=0)
 			b.grid(row=0, sticky='S', column=mode, padx=8, pady=2)
 
 		self.calendar=Calendar(self.calendarFrame, firstweekday=calendar.SUNDAY)
@@ -66,11 +66,17 @@ class MainApplication(tk.Frame):
 			split=line.split()
 			self.info[split[0]]=split[1]
 		infile.close()
-		
-		self.curMeal="Breakfast"
-		mealFile=("%s.dat" %self.curMeal)
-		infile=open_data('data', mealFile, 'r')
+		if(self.v.get()=='1'):
+			self.mealType="Breakfast"
+		elif(self.v.get()=='2'):
+			self.mealType="Lunch"
+		else:
+			self.mealType="Dinner"
+		mealfile=("%s.dat" %self.mealType)
+
+		infile=open_data('data', mealfile, 'r')
 		self.meal={}
+		print(mealfile)
 		for line in infile:
 			split=line.split()
 			self.meal[split[0]]=(' '.join(split[1:len(split)]))
@@ -82,17 +88,19 @@ class MainApplication(tk.Frame):
 		if(dates==None):
 			return
 		self.readInfo()
+		if(self.info=={} or self.meal=={}):
+			return
 		key=self.get_keys()
 		date={'input_5': ""}
 		payload={**self.info, **self.meal, **key, **date}
-
+		payload['input_6']=self.mealType
 		infile=open_data('data', 'dates.dat', 'a')
-
+		url = 'http://dining.carleton.ca/locations/fresh-food-company/'
 		for date in dates:
 			payload['input_5']= date
 			infile.write(date)
 			infile.write("\n")
-			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
+			r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
 		infile.close()
 
 

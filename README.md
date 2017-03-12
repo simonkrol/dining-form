@@ -29,9 +29,9 @@ Store user meals and retrieve them upon startup to block dates
 Version 1.3
 
 
-To Run:
+To Run (Windows)
 Download or clone the repository
 Make sure pip and Python 3 are installed
-install the requests library ($ pip install requests)
+Install the requests library ($ pip install requests)
 
 You're ready to go, just run the bagged_lunch_gui.py to use the GUI or bagged_lunch_script.py for the script

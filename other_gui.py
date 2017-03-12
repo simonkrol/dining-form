@@ -116,8 +116,8 @@ class MealGUI(tk.Tk):
 		self.parent=parent
 		self.bind('<Return>', self.submit)
 		self.mealtype=mealtype
-		self.BreakfastKey=['input_6', 'input_14', 'input_16']
-		self.LunchDinnerKey=['input_6', 'input_15', 'input_16', 'input_17', 'input_18', 'input_19']
+		self.BreakfastKey=['input_14', 'input_16']
+		self.LunchDinnerKey=['input_15', 'input_16', 'input_17', 'input_18', 'input_19']
 		self.initialize()
 
 	def initialize(self):
@@ -198,7 +198,7 @@ class MealGUI(tk.Tk):
 
 
 def open_data(dir_loc, file, opentype):
-	directory = ('%s\%s\%s' %(os.path.getcwd(), 'dining form', dir_loc))
+	directory = ('%s\%s' %(os.getcwd(), dir_loc))
 	if not os.path.exists(directory):
 		os.makedirs(directory)
 	location=('%s/%s' %(dir_loc, file))
