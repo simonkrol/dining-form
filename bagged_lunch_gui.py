@@ -91,7 +91,6 @@ class MainApplication(tk.Frame):
 
 		for date in dates:
 			payload['input_5']= date
-			print(payload)
 			infile.write(date)
 			infile.write("\n")
 			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
@@ -104,11 +103,8 @@ class MainApplication(tk.Frame):
 def open_data(dir_loc, file, opentype):
 	directory = ('%s\%s\%s' %(os.path.realpath('..'), 'dining form', dir_loc))
 	if not os.path.exists(directory):
-		print(directory)
 		os.makedirs(directory)
-	
 	else:
-		print(directory)
 		print (os.path.exists(directory))
 	location=('%s/%s' %(dir_loc, file))
 	try:

@@ -114,7 +114,6 @@ class MealGUI(tk.Tk):
 		tk.Tk.__init__(self, parent)
 		self.upperparent=upperparent
 		self.parent=parent
-		print(type(mealtype))
 		self.bind('<Return>', self.submit)
 		self.mealtype=mealtype
 		self.BreakfastKey=['input_6', 'input_14', 'input_16']
@@ -162,9 +161,7 @@ class MealGUI(tk.Tk):
 		self.optionFrame = tk.LabelFrame(self.stepOne)
 		self.optionFrame.grid(row=optionNum, columnspan=7, sticky='W',padx=5, pady=5, ipadx=5, ipady=5)
 		self.var.append(tk.StringVar(self.optionFrame))
-		print(choices)
 		try:
-			print(self.val[optionNum])
 			self.var[optionNum].set(self.val[optionNum])
 		except:
 
@@ -203,12 +200,7 @@ class MealGUI(tk.Tk):
 def open_data(dir_loc, file, opentype):
 	directory = ('%s\%s\%s' %(os.path.realpath('..'), 'dining form', dir_loc))
 	if not os.path.exists(directory):
-		print(directory)
 		os.makedirs(directory)
-	
-	else:
-		print(directory)
-		print (os.path.exists(directory))
 	location=('%s/%s' %(dir_loc, file))
 	try:
 		open(location, 'x')

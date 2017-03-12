@@ -154,9 +154,7 @@ class Calendar(ttk.Frame):
 
 	def _show_selection(self, text, bbox):
 		"""Configure canvas for a new selection."""
-		print("showing selection")
 		if(self._selection==None):
-			print("selection not made")
 			return
 		newcanvas = tkinter.Canvas(self._calendar,
 		background=self.sel_bg, borderwidth=0, highlightthickness=0)
@@ -174,7 +172,6 @@ class Calendar(ttk.Frame):
 	# Callbacks
 	def _unpressed(self, canvas):
 		#self.days.remove
-		print(canvas.gettags(canvas.text))
 		for tag in canvas.gettags(canvas.text):
 			if tag in self.days:
 				self.days.remove(tag)
@@ -186,41 +183,34 @@ class Calendar(ttk.Frame):
 		x, y, widget = evt.x, evt.y, evt.widget
 		item = widget.identify_row(y)
 		column = widget.identify_column(x)
-		print("into pressed")
+
 		if not column or not item in self._items:
 			# clicked in the weekdays row or just outside the columns
-			print("returned 1")
 			return
 
 		item_values = widget.item(item)['values']
 		if not len(item_values): # row is empty for this month
-			print("returned 2")
 			return
 
 		text = item_values[int(column[1]) - 1]
 		if not text: # date is empty
-			print("returned 3")
 			return
 
 		bbox = widget.bbox(item, column)
 		if not bbox: # calendar not visible yet
-			print("returned 4")
 			return
 
 		# update and then show selection
 		text = '%02d' % text
 		if(self._selection == (text, item, column)):
-			print("selection not = new selection")
 			self._selection=None
 		else:
-			print("selection = new selection")
 			self._selection = (text, item, column)
 			self.add_day()
 		self._show_selection(text, bbox)
 
 
 	def _prev_month(self):
-		print("prevmonth")
 		"""Updated calendar to show the previous month."""
 		#self._canvas.place_forget()
 
@@ -229,7 +219,6 @@ class Calendar(ttk.Frame):
 		self._build_calendar() # reconstuct calendar
 
 	def _next_month(self):
-		print("nextmonth")
 		"""Update calendar to show the next month."""
 		#self._canvas.place_forget()
 
@@ -252,6 +241,5 @@ class Calendar(ttk.Frame):
 			month=("%i" %self._date.month)
 		newday=("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
 		self.days.append(newday)
-		print(self.days)
 	def get_day(self):
 		return ("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
