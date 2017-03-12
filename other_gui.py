@@ -39,11 +39,11 @@ class InfoGUI(tk.Tk):
 		SubmitBtn.grid(row=len(labels), column=3, sticky='W', padx=5, pady=2)
 
 	def submit(self, event=None):
-		
+		self.val=[]
 		for i in range(len(self.valtxt)):
 			
 			if(self.valtxt[i].get()!=""):
-				self.val[i]=(self.valtxt[i]).get()
+				self.val.append((self.valtxt[i]).get())
 			else:
 				return
 		self.upperparent.deiconify()
@@ -198,7 +198,7 @@ class MealGUI(tk.Tk):
 
 
 def open_data(dir_loc, file, opentype):
-	directory = ('%s\%s\%s' %(os.path.realpath('..'), 'dining form', dir_loc))
+	directory = ('%s\%s\%s' %(os.path.getcwd(), 'dining form', dir_loc))
 	if not os.path.exists(directory):
 		os.makedirs(directory)
 	location=('%s/%s' %(dir_loc, file))

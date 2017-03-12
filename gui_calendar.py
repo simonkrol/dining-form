@@ -58,7 +58,6 @@ class Calendar(ttk.Frame):
 		self._calendar.bind('<Map>', self.__minsize)
 
 	def __setitem__(self, item, value):
-		print("setitem")
 		if item in ('year', 'month'):
 			raise AttributeError("attribute '%s' is not writeable" % item)
 		#elif item == 'selectbackground':
@@ -69,7 +68,6 @@ class Calendar(ttk.Frame):
 			ttk.Frame.__setitem__(self, item, value)
 
 	def __getitem__(self, item):
-		print("getitem")
 		if item in ('year', 'month'):
 			return getattr(self._date, item)
 		#elif item == 'selectbackground':
@@ -81,7 +79,6 @@ class Calendar(ttk.Frame):
 			return r[item]
 
 	def __setup_styles(self):
-		print("setupstyles")
 		# custom ttk styles
 		style = ttk.Style(self.master)
 		arrow_layout = lambda dir: (
@@ -91,7 +88,6 @@ class Calendar(ttk.Frame):
 		style.layout('R.TButton', arrow_layout('right'))
 
 	def __place_widgets(self):
-		print("placewidgets")
 		# header frame and its widgets
 		hframe = ttk.Frame(self)
 		lbtn = ttk.Button(hframe, style='L.TButton', command=self._prev_month)
@@ -108,7 +104,6 @@ class Calendar(ttk.Frame):
 		self._calendar.pack(in_=self, expand=1, fill='both', side='bottom')
 
 	def __config_calendar(self):
-		print("configcalendar")
 		cols = self._cal.formatweekheader(3).split()
 		self._calendar['columns'] = cols
 		self._calendar.tag_configure('header', background='grey90')
@@ -121,24 +116,15 @@ class Calendar(ttk.Frame):
 				anchor='e')
 
 	def __setup_selection(self):
-		print("setup selection")
 		self._font = tkinter.font.Font()
-		#self._canvas = canvas = tkinter.Canvas(self._calendar,
-		#	background=self.sel_bg, borderwidth=0, highlightthickness=0)
-		#canvas.text = canvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
-
-		#canvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(canvas))
-		#self._calendar.bind('<Configure>', lambda evt: canvas.place_forget())
 		self._calendar.bind('<ButtonPress-1>', self._pressed)
 	
 	def __minsize(self, evt):
-		print("minsize")
 		width, height = self._calendar.master.geometry().split('x')
 		height = height[:height.index('+')]
 		self._calendar.master.minsize(width, height)
 
 	def _build_calendar(self):
-		print("buildcalendar")
 		year, month = self._date.year, self._date.month
 
 		# update header text (Month, YEAR)

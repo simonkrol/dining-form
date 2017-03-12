@@ -1,4 +1,3 @@
-#from tkinter import Tk, Button, ttk #Label
 import tkinter as tk
 from gui_calendar import Calendar
 from other_gui import InfoGUI, MealsGUI
@@ -104,8 +103,6 @@ def open_data(dir_loc, file, opentype):
 	directory = ('%s\%s\%s' %(os.path.realpath('..'), 'dining form', dir_loc))
 	if not os.path.exists(directory):
 		os.makedirs(directory)
-	else:
-		print (os.path.exists(directory))
 	location=('%s/%s' %(dir_loc, file))
 	try:
 		open(location, 'x')

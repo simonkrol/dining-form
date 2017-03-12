@@ -19,9 +19,19 @@ Add an Info GUI to the Calendar GUI (DONE)
 Add a Meal  GUI to the Calendar GUI (DONE)
 Block the requesting of meals that have already been requested
 Add special request capability
+Comment code
+Clean up code
 Prevent meals in the past from being ordered
 Remove dates stored in the past from dat file?
 Condense the stored meal information
 Store user meals and retrieve them upon startup to block dates
 -Send out email reminders when you need to pick up bagged lunches
 Version 1.3
+
+
+To Run:
+Download or clone the repository
+Make sure pip and Python 3 are installed
+install the requests library ($ pip install requests)
+
+You're ready to go, just run the bagged_lunch_gui.py to use the GUI or bagged_lunch_script.py for the script
