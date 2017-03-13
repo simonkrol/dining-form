@@ -4,6 +4,7 @@ from tkinter import ttk
 import calendar
 import tkinter
 import random
+import datetime
 
 def get_calendar(locale, fwday):
 	# instantiate proper calendar class
@@ -58,27 +59,6 @@ class Calendar(ttk.Frame):
 		self._calendar.bind('<Map>', self.__minsize)
 
 		self.canvi=[]
-
-	def __setitem__(self, item, value):
-		if item in ('year', 'month'):
-			raise AttributeError("attribute '%s' is not writeable" % item)
-		#elif item == 'selectbackground':
-			#self._canvas['background'] = value
-		#elif item == 'selectforeground':
-			#self._canvas.itemconfigure(self._canvas.text, item=value)
-		else:
-			ttk.Frame.__setitem__(self, item, value)
-
-	def __getitem__(self, item):
-		if item in ('year', 'month'):
-			return getattr(self._date, item)
-		#elif item == 'selectbackground':
-			#return self._canvas['background']
-		#elif item == 'selectforeground':
-			#return self._canvas.itemcget(self._canvas.text, 'fill')
-		else:
-			r = ttk.tclobjs_to_py({item: ttk.Frame.__getitem__(self, item)})
-			return r[item]
 
 	def __setup_styles(self):
 		# custom ttk styles
@@ -144,55 +124,52 @@ class Calendar(ttk.Frame):
 		"""Configure canvas for a new selection."""
 		if(self._selection==None):
 			return
-		newcanvas = tkinter.Canvas(self._calendar,
-		background=self.sel_bg, borderwidth=0, highlightthickness=0)
-		newcanvas.text = newcanvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
-		x, y, width, height = bbox
-		print(x)
-		print(y)
-		print(width)
-		print(height)
+		self.placecanvas(self._selection[0],True, self.sel_bg, self.sel_fg)
 
-		newcanvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(newcanvas))
-		textw = self._font.measure(text)
-		newcanvas.configure(width=width, height=height)
-		newcanvas.coords(newcanvas.text, width - textw, height / 2 - 1)
-		newcanvas.itemconfigure(newcanvas.text, text=text)
-		newcanvas.place(in_=self._calendar, x=x, y=y)
-
-		newcanvas.addtag_all(self.get_day())
-		self.canvi.append(newcanvas)
-	# Callbacks
 	def deletecanvas(self):
 		for i in self.canvi:
 			i.place_forget()
 		self.days=[]
 		self.canvi=[]
-		self.placecanvas("101")
+	
+	def placecanvas(self, day, removable, background, textcolour):
+		day=int(day)
+		newdate=datetime.date(self._date.year, self._date.month, day)	#date to place icon on
 
-	def placecanvas(self, date):
+		weekday=((newdate.isoweekday())%7)								#get day of week(0-6)
+		weeknum=(int((newdate.day-1)/7))									#get which week the day falls on
+
+		if(weekday<(datetime.date(newdate.year, newdate.month, 1)).isoweekday()):	#account for weeks starting on different day
+			weeknum+=1
+
+		text=str(newdate.day)
+		if(newdate.day<10):
+			text=('0%s' %text)											#canvas text
+		x, y, width, height = ((33*weekday)+1,(20*weeknum)+21,33,20)	#generate coordinates
+
+
 		newcanvas = tkinter.Canvas(self._calendar,
 		background=self.sel_bg, borderwidth=0, highlightthickness=0)
-		newcanvas.text = newcanvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
-	
-		text=2
-		x, y, width, height = (2,2,2,2)
-		
+
+		newcanvas.text = newcanvas.create_text(0, 0, fill=textcolour, anchor='w')
+
 		newcanvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(newcanvas))
 		textw = self._font.measure(text)
 		newcanvas.configure(width=width, height=height)
 		newcanvas.coords(newcanvas.text, width - textw, height / 2 - 1)
 		newcanvas.itemconfigure(newcanvas.text, text=text)
 		newcanvas.place(in_=self._calendar, x=x, y=y)
-
+		newcanvas.addtag_all("%i/%i/%i" %(newdate.month, newdate.day, newdate.year))
+		if(removable):
+			self.days.append("%i/%i/%i" %(newdate.month, newdate.day, newdate.year))
+	
 		self.canvi.append(newcanvas)
+
 	def _unpressed(self, canvas):
-		#self.days.remove
-		for tag in canvas.gettags(canvas.text):
-			if tag in self.days:
-				self.days.remove(tag)
-				canvas.place_forget()
-				return
+		tag=canvas.gettags(canvas.text)[0]
+		if(tag in self.days):
+			self.days.remove(tag)
+			canvas.place_forget()
 
 	def _pressed(self, evt):
 		"""Clicked somewhere in the calendar."""
@@ -227,16 +204,16 @@ class Calendar(ttk.Frame):
 
 
 	def _prev_month(self):
-		self.deletecanvas()
+		
 		"""Updated calendar to show the previous month."""
 		#self._canvas.place_forget()
 
 		self._date = self._date - self.timedelta(days=1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
 		self._build_calendar() # reconstuct calendar
-
-	def _next_month(self):
 		self.deletecanvas()
+	def _next_month(self):
+		
 		"""Update calendar to show the next month."""
 		#self._canvas.place_forget()
 
@@ -245,7 +222,7 @@ class Calendar(ttk.Frame):
 			days=calendar.monthrange(year, month)[1] + 1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
 		self._build_calendar() # reconstruct calendar
-
+		self.deletecanvas()
 	# Properties
 
 	@property
