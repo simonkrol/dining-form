@@ -148,13 +148,16 @@ class Calendar(ttk.Frame):
 		background=self.sel_bg, borderwidth=0, highlightthickness=0)
 		newcanvas.text = newcanvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
 		x, y, width, height = bbox
-		
+		print(x)
+		print(y)
+		print(width)
+		print(height)
 
 		newcanvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(newcanvas))
 		textw = self._font.measure(text)
 		newcanvas.configure(width=width, height=height)
 		newcanvas.coords(newcanvas.text, width - textw, height / 2 - 1)
-		newcanvas.itemconfigure(newcanvas.text, text=text, tags=self.get_day)
+		newcanvas.itemconfigure(newcanvas.text, text=text)
 		newcanvas.place(in_=self._calendar, x=x, y=y)
 
 		newcanvas.addtag_all(self.get_day())
@@ -164,6 +167,25 @@ class Calendar(ttk.Frame):
 		for i in self.canvi:
 			i.place_forget()
 		self.days=[]
+		self.canvi=[]
+		self.placecanvas("101")
+
+	def placecanvas(self, date):
+		newcanvas = tkinter.Canvas(self._calendar,
+		background=self.sel_bg, borderwidth=0, highlightthickness=0)
+		newcanvas.text = newcanvas.create_text(0, 0, fill=self.sel_fg, anchor='w')
+	
+		text=2
+		x, y, width, height = (2,2,2,2)
+		
+		newcanvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(newcanvas))
+		textw = self._font.measure(text)
+		newcanvas.configure(width=width, height=height)
+		newcanvas.coords(newcanvas.text, width - textw, height / 2 - 1)
+		newcanvas.itemconfigure(newcanvas.text, text=text)
+		newcanvas.place(in_=self._calendar, x=x, y=y)
+
+		self.canvi.append(newcanvas)
 	def _unpressed(self, canvas):
 		#self.days.remove
 		for tag in canvas.gettags(canvas.text):
