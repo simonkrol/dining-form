@@ -98,8 +98,16 @@ class MainApplication(tk.Frame):
 		url = 'http://dining.carleton.ca/locations/fresh-food-company/'
 		for date in dates:
 			payload['input_5']= date
-			infile.write(date)
+			datelist=date.split("/")
+			infile.write(self.v.get())
+			infile.write(" ")
+			infile.write(datelist[0])
+			infile.write(" ")
+			infile.write(datelist[1])
+			infile.write(" ")
+			infile.write(datelist[2])
 			infile.write("\n")
+			print(date)
 			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
 		infile.close()
 

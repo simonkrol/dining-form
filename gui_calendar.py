@@ -61,6 +61,7 @@ class Calendar(ttk.Frame):
 		self._calendar.bind('<Map>', self.__minsize)
 
 		self.canvi=[]
+		self.blocks()
 
 	def __setup_styles(self):
 		# custom ttk styles
@@ -134,7 +135,7 @@ class Calendar(ttk.Frame):
 		self.days=[]
 		self.canvi=[]
 	
-	def placecanvas(self, day, removable, background, textcolour):
+	def placecanvas(self, day, removable, nbackground, textcolour):
 		day=int(day)
 		newdate=datetime.date(self._date.year, self._date.month, day)	#date to place icon on
 
@@ -149,9 +150,10 @@ class Calendar(ttk.Frame):
 			text=('0%s' %text)											#canvas text
 		x, y, width, height = ((33*weekday)+1,(20*weeknum)+21,33,20)	#generate coordinates
 
-
+		print(type(self.sel_bg))
+		print(self.sel_bg)
 		newcanvas = tkinter.Canvas(self._calendar,
-		background=self.sel_bg, borderwidth=0, highlightthickness=0)
+		background=nbackground, borderwidth=0, highlightthickness=0)
 
 		newcanvas.text = newcanvas.create_text(0, 0, fill=textcolour, anchor='w')
 
@@ -163,6 +165,7 @@ class Calendar(ttk.Frame):
 		newcanvas.place(in_=self._calendar, x=x, y=y)
 		newcanvas.addtag_all("%i/%i/%i" %(newdate.month, newdate.day, newdate.year))
 		if(removable):
+			pass
 			self.days.append("%i/%i/%i" %(newdate.month, newdate.day, newdate.year))
 	
 		self.canvi.append(newcanvas)
@@ -237,7 +240,6 @@ class Calendar(ttk.Frame):
 		else:
 			month=("%i" %self._date.month)
 		newday=("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
-		self.days.append(newday)
 	def get_day(self):
 		return ("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
 	def blocks(self, meal=1):
@@ -249,7 +251,7 @@ class Calendar(ttk.Frame):
 			print(split)
 			if(split[0]==meal):
 				if(int(split[3])==self._date.year and int(split[1])==self._date.month):
-					self.placecanvas(int(split[2]),False, self.sel_bg, self.sel_fg)
+					self.placecanvas(int(split[2]),False, '#DC143C', self.sel_fg)
 
 
 def open_data(dir_loc, file, opentype):
