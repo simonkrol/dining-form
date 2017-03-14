@@ -5,6 +5,7 @@ import calendar
 import tkinter
 import random
 import datetime
+import os
 
 def get_calendar(locale, fwday):
 	# instantiate proper calendar class
@@ -22,6 +23,7 @@ class Calendar(ttk.Frame):
 	days=[]
 
 	def __init__(self, master=None, **kw):
+		print(master==None)
 		"""
 		WIDGET-SPECIFIC OPTIONS
 
@@ -238,3 +240,27 @@ class Calendar(ttk.Frame):
 		self.days.append(newday)
 	def get_day(self):
 		return ("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
+	def blocks(self, meal=1):
+		self.deletecanvas()
+		print("Made it in")
+		infile=open_data('data', 'dates.dat', 'r')
+		for line in infile:
+			split=line.split()
+			print(split)
+			if(split[0]==meal):
+				if(int(split[3])==self._date.year and int(split[1])==self._date.month):
+					self.placecanvas(int(split[2]),False, self.sel_bg, self.sel_fg)
+
+
+def open_data(dir_loc, file, opentype):
+	directory = ('%s\%s' %(os.getcwd(), dir_loc))
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+	location=('%s/%s' %(dir_loc, file))
+	try:
+		open(location, 'x')
+	except OSError as e:
+		pass
+	infile=open(location, opentype)
+	return infile
+

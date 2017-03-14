@@ -27,7 +27,7 @@ Condense the stored meal information
 Store user meals and retrieve them upon startup to block dates
 -Send out email reminders when you need to pick up bagged lunches
 Version 1.3
-
+Exit all frames upon any window close
 
 To Run (Windows)
 Download or clone the repository

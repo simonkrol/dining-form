@@ -43,7 +43,7 @@ class MainApplication(tk.Frame):
 		self.v.set(1) # initialize
 
 		for text, mode in MODES:
-			b = tk.Radiobutton(self.radioFrame, text=text, variable=self.v, value=mode, indicatoron=0)
+			b = tk.Radiobutton(self.radioFrame, text=text, variable=self.v, value=mode, indicatoron=0, command=self.reset_blocks)
 			b.grid(row=0, sticky='S', column=mode, padx=8, pady=2)
 
 		self.calendar=Calendar(self.calendarFrame, firstweekday=calendar.SUNDAY)
@@ -106,7 +106,10 @@ class MainApplication(tk.Frame):
 
 	def get_keys(self):
 		return {'is_submit_3':'1', 'gform_submit':'3', 'state_3':'WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0='}
-
+	def reset_blocks(self):
+		print("made it")
+		self.calendar.blocks(self.v.get())
+		pass
 def open_data(dir_loc, file, opentype):
 	directory = ('%s\%s\%s' %(os.path.realpath('..'), 'dining form', dir_loc))
 	if not os.path.exists(directory):
