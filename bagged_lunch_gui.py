@@ -46,7 +46,7 @@ class MainApplication(tk.Frame):
 			b = tk.Radiobutton(self.radioFrame, text=text, variable=self.v, value=mode, indicatoron=0, command=self.reset_blocks)
 			b.grid(row=0, sticky='S', column=mode, padx=8, pady=2)
 
-		self.calendar=Calendar(self.calendarFrame, firstweekday=calendar.SUNDAY)
+		self.calendar=Calendar( self.v, self.calendarFrame, firstweekday=calendar.SUNDAY, )
 		self.calendar.grid(sticky='S', column=0, padx=8, pady=2)#I have no idea what either of these do, they work the same without them, leaving them in for now
 
 		if 'win' not in sys.platform:	#Checks for the windows operating system, changes style if not
@@ -76,7 +76,6 @@ class MainApplication(tk.Frame):
 
 		infile=open_data('data', mealfile, 'r')
 		self.meal={}
-		print(mealfile)
 		for line in infile:
 			split=line.split()
 			self.meal[split[0]]=(' '.join(split[1:len(split)]))
@@ -110,13 +109,14 @@ class MainApplication(tk.Frame):
 			print(date)
 			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
 		infile.close()
+		self.calendar.blocks()
 
 
 	def get_keys(self):
 		return {'is_submit_3':'1', 'gform_submit':'3', 'state_3':'WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0='}
 	def reset_blocks(self):
-		print("made it")
-		self.calendar.blocks(self.v.get())
+
+		self.calendar.blocks()
 		pass
 def open_data(dir_loc, file, opentype):
 	directory = ('%s\%s\%s' %(os.path.realpath('..'), 'dining form', dir_loc))

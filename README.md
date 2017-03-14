@@ -17,7 +17,8 @@ To do:
 Add multiclickable Calendar GUI (DONE)
 Add an Info GUI to the Calendar GUI (DONE)
 Add a Meal  GUI to the Calendar GUI (DONE)
-Block the requesting of meals that have already been requested
+Block the requesting of meals that have already been requested (DONE)
+Make meal blocking user specific, based on student number
 Add special request capability
 Comment code
 Clean up code

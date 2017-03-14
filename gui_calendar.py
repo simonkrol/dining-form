@@ -22,8 +22,8 @@ class Calendar(ttk.Frame):
 	canvas={}
 	days=[]
 
-	def __init__(self, master=None, **kw):
-		print(master==None)
+	def __init__(self, v, master=None, **kw):
+		self.v=v
 		"""
 		WIDGET-SPECIFIC OPTIONS
 
@@ -150,8 +150,6 @@ class Calendar(ttk.Frame):
 			text=('0%s' %text)											#canvas text
 		x, y, width, height = ((33*weekday)+1,(20*weeknum)+21,33,20)	#generate coordinates
 
-		print(type(self.sel_bg))
-		print(self.sel_bg)
 		newcanvas = tkinter.Canvas(self._calendar,
 		background=nbackground, borderwidth=0, highlightthickness=0)
 
@@ -216,7 +214,7 @@ class Calendar(ttk.Frame):
 		self._date = self._date - self.timedelta(days=1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
 		self._build_calendar() # reconstuct calendar
-		self.deletecanvas()
+		self.blocks()
 	def _next_month(self):
 		
 		"""Update calendar to show the next month."""
@@ -227,7 +225,7 @@ class Calendar(ttk.Frame):
 			days=calendar.monthrange(year, month)[1] + 1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
 		self._build_calendar() # reconstruct calendar
-		self.deletecanvas()
+		self.blocks()
 	# Properties
 
 	@property
@@ -242,14 +240,15 @@ class Calendar(ttk.Frame):
 		newday=("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
 	def get_day(self):
 		return ("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
-	def blocks(self, meal=1):
+	
+
+	def blocks(self):
 		self.deletecanvas()
-		print("Made it in")
+		meal=int(self.v.get())
 		infile=open_data('data', 'dates.dat', 'r')
 		for line in infile:
 			split=line.split()
-			print(split)
-			if(split[0]==meal):
+			if(int(split[0])==meal):
 				if(int(split[3])==self._date.year and int(split[1])==self._date.month):
 					self.placecanvas(int(split[2]),False, '#DC143C', self.sel_fg)
 
