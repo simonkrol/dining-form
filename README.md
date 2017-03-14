@@ -25,7 +25,7 @@ To do:
 * Prevent meals in the past from being ordered
 * Remove dates stored in the past from dat file?
 * Condense the stored meal information
-* Store user meals and retrieve them upon startup to block dates
+* Store user meals and retrieve them upon startup to block dates (DONE)
 * Send out email reminders when you need to pick up bagged lunches
 * Exit all frames upon any window close
 >Version 1.4
