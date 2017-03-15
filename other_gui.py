@@ -116,8 +116,8 @@ class MealGUI(tk.Tk):
 		self.parent=parent
 		self.bind('<Return>', self.submit)
 		self.mealtype=mealtype
-		self.BreakfastKey=['input_14', 'input_16']
-		self.LunchDinnerKey=['input_15', 'input_16', 'input_17', 'input_18', 'input_19']
+		self.BreakfastKey=['input_14', 'input_16', 'input_20']
+		self.LunchDinnerKey=['input_15', 'input_16', 'input_17', 'input_18', 'input_19', 'input_20']
 		self.initialize()
 
 	def initialize(self):
@@ -143,6 +143,25 @@ class MealGUI(tk.Tk):
 			self.options(saladchoice, "Dressing")
 			self.options(sandwichchoice, "Sandwich Filling")
 			self.options(dessertchoice, "Dessert")
+
+
+
+		optionNum=self.numOptions
+		self.grid()	
+		self.optionFrame = tk.LabelFrame(self.stepOne)
+		self.optionFrame.grid(row=optionNum, columnspan=7, sticky='W',padx=5, pady=5, ipadx=5, ipady=5)
+	
+		optionLabel=tk.Label(self.optionFrame, text="Additional comments")
+		optionLabel.pack(side='left', padx=10, pady=10)
+
+		self.var.append(tk.Entry(self.optionFrame))
+		self.var[self.numOptions].pack(side='left', padx=10, pady=10)
+		try:
+			self.var[self.numOptions].insert(0, self.val[self.numOptions])
+		except:
+			pass
+		self.numOptions+=1
+
 		SubmitBtn = tk.Button(self.stepOne, text="Submit",command=self.submit)
 		SubmitBtn.config( height = 2, width = 11 )
 		SubmitBtn.grid(row=self.numOptions, column=1, sticky='W', padx=8, pady=2)

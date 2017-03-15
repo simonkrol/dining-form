@@ -19,7 +19,7 @@ To do:
 * Add a Meal  GUI to the Calendar GUI (DONE)
 * Block the requesting of meals that have already been requested (DONE)
 * Make meal blocking user specific, based on student number
-* Add special request capability
+* Add special request capability (DONE)
 * Comment code
 * Clean up code
 * Prevent meals in the past from being ordered

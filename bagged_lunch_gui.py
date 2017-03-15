@@ -107,7 +107,7 @@ class MainApplication(tk.Frame):
 			infile.write(datelist[2])
 			infile.write("\n")
 			print(date)
-			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
+			r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
 		infile.close()
 		self.calendar.blocks()
 
