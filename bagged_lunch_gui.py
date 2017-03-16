@@ -1,6 +1,7 @@
 import tkinter as tk
 from gui_calendar import Calendar
 from other_gui import InfoGUI, MealsGUI
+from lunch_methods import open_data
 import calendar
 import requests
 import tkinter.font
@@ -54,7 +55,7 @@ class MainApplication(tk.Frame):
 			style.theme_use('clam')
 	def create_window(self, classval):
 		
-		command=('%s(None, self.parent)' %classval)
+		command=('%s(self.parent)' %classval)
 		self.parent.withdraw()
 		self.window=eval(command)
 		#self.window=InfoGUI(None, self.parent)
@@ -83,52 +84,35 @@ class MainApplication(tk.Frame):
 
 
 	def send_request(self):	
-		dates=(self.calendar.selection)
+		dates=(self.calendar.selection())
+		print(dates)
 		if(dates==None):
 			return
 		self.readInfo()
 		if(self.info=={} or self.meal=={}):
 			return
 		key=self.get_keys()
-		date={'input_5': ""}
+		date={'input_5': "", 'input_6': self.mealType} #Generate dictionary representing the data and the type of meal being ordered
 		payload={**self.info, **self.meal, **key, **date}
-		payload['input_6']=self.mealType
 		infile=open_data('data', 'dates.dat', 'a')
 		url = 'http://dining.carleton.ca/locations/fresh-food-company/'
+
 		for date in dates:
 			payload['input_5']= date
-			datelist=date.split("/")
-			infile.write(self.v.get())
-			infile.write(" ")
-			infile.write(datelist[0])
-			infile.write(" ")
-			infile.write(datelist[1])
-			infile.write(" ")
-			infile.write(datelist[2])
-			infile.write("\n")
+			writetext=('%s %s\n' %(self.v.get(), date))
+			infile.write(writetext)
 			print(date)
-			r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
+			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
 		infile.close()
-		self.calendar.blocks()
+		self.reset_blocks()
 
 
 	def get_keys(self):
 		return {'is_submit_3':'1', 'gform_submit':'3', 'state_3':'WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0='}
+	
 	def reset_blocks(self):
+		self.calendar._blocks()
 
-		self.calendar.blocks()
-		pass
-def open_data(dir_loc, file, opentype):
-	directory = ('%s\%s\%s' %(os.path.realpath('..'), 'dining form', dir_loc))
-	if not os.path.exists(directory):
-		os.makedirs(directory)
-	location=('%s/%s' %(dir_loc, file))
-	try:
-		open(location, 'x')
-	except OSError as e:
-		pass
-	infile=open(location, opentype)
-	return infile
 
 
 if __name__ == "__main__":

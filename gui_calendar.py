@@ -1,5 +1,5 @@
 #Created by svn.python.org, modified by Simon Krol
-
+from lunch_methods import open_data
 from tkinter import ttk
 import calendar
 import tkinter
@@ -35,6 +35,7 @@ class Calendar(ttk.Frame):
 		year = kw.pop('year', self.datetime.now().year)
 		month = kw.pop('month', self.datetime.now().month)
 		locale = kw.pop('locale', None)
+		#generate default canvas background
 		self.sel_bg = kw.pop('selectbackground', '#ecffc4')
 		self.sel_fg = kw.pop('selectforeground', '#05640e')
 
@@ -61,7 +62,7 @@ class Calendar(ttk.Frame):
 		self._calendar.bind('<Map>', self.__minsize)
 
 		self.canvi=[]
-		self.blocks()
+		self._blocks()
 
 	def __setup_styles(self):
 		# custom ttk styles
@@ -127,50 +128,48 @@ class Calendar(ttk.Frame):
 		"""Configure canvas for a new selection."""
 		if(self._selection==None):
 			return
-		self.placecanvas(self._selection[0],True, self.sel_bg, self.sel_fg)
+		#Place a new canvas on the GUI
+		self.placecanvas(self._selection[0],True, self.sel_bg, self.sel_fg) 
 
-	def deletecanvas(self):
-		for i in self.canvi:
-			i.place_forget()
-		self.days=[]
-		self.canvi=[]
+
 	
-	def placecanvas(self, day, removable, nbackground, textcolour):
-		day=int(day)
-		newdate=datetime.date(self._date.year, self._date.month, day)	#date to place icon on
+	def placecanvas(self, text, removable, nbackground, textcolour):
+		newdate=datetime.date(self._date.year, self._date.month, int(text))	#date to place icon on
 
 		weekday=((newdate.isoweekday())%7)								#get day of week(0-6)
 		weeknum=(int((newdate.day-1)/7))									#get which week the day falls on
 
 		if(weekday<(datetime.date(newdate.year, newdate.month, 1)).isoweekday()):	#account for weeks starting on different day
-			weeknum+=1
+			weeknum+=1																#adding one to the week count if the current day is earlier in the calendar than the first of the month
 
-		text=str(newdate.day)
-		if(newdate.day<10):
-			text=('0%s' %text)											#canvas text
 		x, y, width, height = ((33*weekday)+1,(20*weeknum)+21,33,20)	#generate coordinates
 
 		newcanvas = tkinter.Canvas(self._calendar,
-		background=nbackground, borderwidth=0, highlightthickness=0)
+		background=nbackground, borderwidth=0, highlightthickness=0) #Create new canvas
 
-		newcanvas.text = newcanvas.create_text(0, 0, fill=textcolour, anchor='w')
-
-		newcanvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(newcanvas))
-		textw = self._font.measure(text)
-		newcanvas.configure(width=width, height=height)
-		newcanvas.coords(newcanvas.text, width - textw, height / 2 - 1)
+		newcanvas.text = newcanvas.create_text(0, 0, fill=textcolour, anchor='w')	#Set the canvas text
+		newcanvas.bind('<ButtonPress-1>', lambda evt: self._unpressed(newcanvas))	#Bind the unpressed method to canvas button press
+		
+		newcanvas.configure(width=width, height=height)		#Set canvas height and width to the size of date box
+		newcanvas.coords(newcanvas.text, width - self._font.measure(text), height / 2 - 1)
 		newcanvas.itemconfigure(newcanvas.text, text=text)
 		newcanvas.place(in_=self._calendar, x=x, y=y)
-		newcanvas.addtag_all("%i/%i/%i" %(newdate.month, newdate.day, newdate.year))
-		if(removable):
-			pass
-			self.days.append("%i/%i/%i" %(newdate.month, newdate.day, newdate.year))
-	
-		self.canvi.append(newcanvas)
+		newcanvas.addtag_all("%i/%s/%i" %(newdate.month, text, newdate.year))
+		if(removable):	#Add to days list if to be removable
+			self.days.append("%i/%s/%i" %(newdate.month, text, newdate.year))
+		
+		self.canvi.append(newcanvas) #Append the canvas to a list of canvasses to be accessed when removal is required
+
+	#Delete all canvases within self
+	def _deletecanvas(self):
+		for i in self.canvi: 	#For each canvas stored on the frame
+			i.place_forget()	#Delete the canvas itself
+		self.days=[]		#Clear the lists storing days to be sent and current canvases
+		self.canvi=[]
 
 	def _unpressed(self, canvas):
-		tag=canvas.gettags(canvas.text)[0]
-		if(tag in self.days):
+		tag=canvas.gettags(canvas.text)[0]		#Get the tag appended to the canvas
+		if(tag in self.days):				#If in the 'removable' list, remove the tag from the list and delete the canvas on the frame
 			self.days.remove(tag)
 			canvas.place_forget()
 
@@ -196,72 +195,52 @@ class Calendar(ttk.Frame):
 		if not bbox: # calendar not visible yet
 			return
 
-		# update and then show selection
-		text = '%02d' % text
+		#Update calendar, either removing removing selection or adding a new one
+		text = ('%02d' % text)
 		if(self._selection == (text, item, column)):
 			self._selection=None
 		else:
 			self._selection = (text, item, column)
-			self.add_day()
 		self._show_selection(text, bbox)
 
 
 	def _prev_month(self):
 		
 		"""Updated calendar to show the previous month."""
-		#self._canvas.place_forget()
 
 		self._date = self._date - self.timedelta(days=1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
 		self._build_calendar() # reconstuct calendar
-		self.blocks()
+		self._blocks()
+
 	def _next_month(self):
 		
 		"""Update calendar to show the next month."""
-		#self._canvas.place_forget()
 
 		year, month = self._date.year, self._date.month
 		self._date = self._date + self.timedelta(
 			days=calendar.monthrange(year, month)[1] + 1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
 		self._build_calendar() # reconstruct calendar
-		self.blocks()
-	# Properties
+		self._blocks()
 
-	@property
-	def selection(self):
-		"""Return a datetime representing all currently selected days"""
-		return self.days
-	def add_day(self):
-		if(self._date.month<10):
-			month=("0%i" %self._date.month)
-		else:
-			month=("%i" %self._date.month)
-		newday=("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
-	def get_day(self):
-		return ("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
-	
 
-	def blocks(self):
-		self.deletecanvas()
-		meal=int(self.v.get())
-		infile=open_data('data', 'dates.dat', 'r')
-		for line in infile:
+	def _blocks(self):
+		self._deletecanvas() #Delete all canvases currently on the frame
+		meal=int(self.v.get())	#Find the current meal
+		infile=open_data('data', 'dates.dat', 'r') #Open the dates file to find meals needing to be blocked
+		for line in infile: #Parse file and block meals
 			split=line.split()
 			if(int(split[0])==meal):
-				if(int(split[3])==self._date.year and int(split[1])==self._date.month):
-					self.placecanvas(int(split[2]),False, '#DC143C', self.sel_fg)
+				split=split[1].split('/')
+				if(int(split[2])==self._date.year and int(split[0])==self._date.month):
+					self.placecanvas(split[1],False, '#DC143C', self.sel_fg)		#Place a non-removable canvas with colour red
 
 
-def open_data(dir_loc, file, opentype):
-	directory = ('%s\%s' %(os.getcwd(), dir_loc))
-	if not os.path.exists(directory):
-		os.makedirs(directory)
-	location=('%s/%s' %(dir_loc, file))
-	try:
-		open(location, 'x')
-	except OSError as e:
-		pass
-	infile=open(location, opentype)
-	return infile
+	def selection(self):
+		"""Return a list of strings representing all currently selected days"""
+		return self.days
 
+	def get_day(self): #Returns the day that was just selected
+		if(self._selection!=None):
+			return ("%i/%s/%i" %(self._date.month, self._selection[0], self._date.year))
