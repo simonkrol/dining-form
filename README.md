@@ -18,16 +18,15 @@ To do:
 * Add an Info GUI to the Calendar GUI (DONE)
 * Add a Meal  GUI to the Calendar GUI (DONE)
 * Block the requesting of meals that have already been requested (DONE)
-* Make meal blocking user specific, based on student number
+* Make meal blocking user specific, based on student number (DONE)
 * Add special request capability (DONE)
-* Comment code
-* Clean up code
 * Prevent meals in the past from being ordered
 * Remove dates stored in the past from dat file?
 * Condense the stored meal information
 * Store user meals and retrieve them upon startup to block dates (DONE)
 * Send out email reminders when you need to pick up bagged lunches
 * Exit all frames upon any window close
+* Add warning label to indicate what needs to be done, ie: info needs to be filled..etc
 >Version 1.4
 
 To Run (Windows)

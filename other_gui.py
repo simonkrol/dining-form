@@ -5,11 +5,12 @@ import sys
 
 class InfoGUI(tk.Tk):
 	"""docstring for Values"""
-	def __init__(self, upperparent):
+	def __init__(self, parent, upperparent):
 		tk.Tk.__init__(self, None)
 		self.bind('<Return>', self.submit)
 		self.initialize()
 		self.upperparent=upperparent
+		self.parent=parent
 
 	def initialize(self):
 		self.grid()
@@ -19,7 +20,7 @@ class InfoGUI(tk.Tk):
 		labels=["First Name", "Last Name", "Student #", "Telephone #", "Email"]
 		self.vallbl=[]
 		self.valtxt=[]
-		self.val=[None]*len(labels)
+		self.val=[]
 		
 		self.readInfo()
 		for i in range(len(labels)):
@@ -29,9 +30,10 @@ class InfoGUI(tk.Tk):
 		
 			self.valtxt.append(tk.Entry(stepOne))
 			self.valtxt[i].grid(row=i, column=1, columnspan=3, pady=2, sticky='WE')
-			if(self.val[i]!=None):
+			try:
 				self.valtxt[i].insert(0, self.val[i])
-			
+			except:
+				pass
 
 		ClearBtn = tk.Button(stepOne, text="Clear", command=self.clear)
 		ClearBtn.grid(row=len(labels), column=2, sticky='W', padx=5, pady=2)
@@ -47,6 +49,7 @@ class InfoGUI(tk.Tk):
 				return
 		self.upperparent.deiconify()
 		self.writeInfo()
+		self.parent.calendar._blocks()
 		self.destroy()
 
 
@@ -72,7 +75,7 @@ class InfoGUI(tk.Tk):
 		infile.close()
 
 class MealsGUI(tk.Tk):
-	def __init__(self, upperparent):
+	def __init__(self, parent, upperparent):
 		tk.Tk.__init__(self, None)
 		self.upperparent=upperparent
 		self.bind('<Return>', self.submit)
@@ -86,10 +89,9 @@ class MealsGUI(tk.Tk):
 
 		labels=['Breakfast', 'Lunch', 'Dinner']
 		for label in labels:
-			btn=tk.Button(stepOne, text=label, command=lambda: self.create_window(label))
+			btn=tk.Button(stepOne, text=label, command=lambda label=label: self.create_window(label))
 			btn.config(height=2, width=11)
 			btn.grid(row=labels.index(label)+1, column =1 , sticky='W', padx=8, pady=2)
-
 		SubmitBtn = tk.Button(stepOne, text="Submit",command=self.submit)
 		SubmitBtn.config( height = 2, width = 11 )
 		SubmitBtn.grid(row=4, column=1, sticky='W', padx=8, pady=2)
@@ -101,13 +103,14 @@ class MealsGUI(tk.Tk):
 
 	def create_window(self, classval):
 		self.withdraw()
+		print(classval)
 		self.window=MealGUI(None, self, classval)
 
 class MealGUI(tk.Tk):
 	def __init__(self, parent, upperparent, mealtype):
+		print(mealtype)
 		tk.Tk.__init__(self, parent)
 		self.upperparent=upperparent
-		self.parent=parent
 		self.bind('<Return>', self.submit)
 		self.mealtype=mealtype
 		self.BreakfastKey=['input_14', 'input_16', 'input_20']

@@ -55,10 +55,10 @@ class MainApplication(tk.Frame):
 			style.theme_use('clam')
 	def create_window(self, classval):
 		
-		command=('%s(self.parent)' %classval)
+		command=('%s(self, self.parent)' %classval)
 		self.parent.withdraw()
 		self.window=eval(command)
-		#self.window=InfoGUI(None, self.parent)
+
 
 	def readInfo(self):
 		infile=open_data('data', 'info.dat', 'r')
@@ -85,7 +85,6 @@ class MainApplication(tk.Frame):
 
 	def send_request(self):	
 		dates=(self.calendar.selection())
-		print(dates)
 		if(dates==None):
 			return
 		self.readInfo()
@@ -96,10 +95,9 @@ class MainApplication(tk.Frame):
 		payload={**self.info, **self.meal, **key, **date}
 		infile=open_data('data', 'dates.dat', 'a')
 		url = 'http://dining.carleton.ca/locations/fresh-food-company/'
-
 		for date in dates:
 			payload['input_5']= date
-			writetext=('%s %s\n' %(self.v.get(), date))
+			writetext=('%s %s %s\n' %(self.v.get(), date, self.info['input_2']))
 			infile.write(writetext)
 			print(date)
 			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing

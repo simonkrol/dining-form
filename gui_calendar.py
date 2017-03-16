@@ -228,14 +228,22 @@ class Calendar(ttk.Frame):
 	def _blocks(self):
 		self._deletecanvas() #Delete all canvases currently on the frame
 		meal=int(self.v.get())	#Find the current meal
+		infile=open_data('data', 'info.dat', 'r')
+		lines=infile.readlines()
+		if(len(lines)<5):
+			return
+		split=lines[2].split()
+		infile.close()
+		studentNum=split[1]
 		infile=open_data('data', 'dates.dat', 'r') #Open the dates file to find meals needing to be blocked
 		for line in infile: #Parse file and block meals
 			split=line.split()
-			if(int(split[0])==meal):
-				split=split[1].split('/')
-				if(int(split[2])==self._date.year and int(split[0])==self._date.month):
-					self.placecanvas(split[1],False, '#DC143C', self.sel_fg)		#Place a non-removable canvas with colour red
-
+			if(split[2]==studentNum):
+				if(int(split[0])==meal):
+					split=split[1].split('/')
+					if(int(split[2])==self._date.year and int(split[0])==self._date.month):
+						self.placecanvas(split[1],False, '#DC143C', self.sel_fg)		#Place a non-removable canvas with colour red
+		infile.close()
 
 	def selection(self):
 		"""Return a list of strings representing all currently selected days"""
