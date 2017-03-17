@@ -80,6 +80,7 @@ class InfoGUI(tk.Tk):
 class MealsGUI(tk.Tk):
 	def __init__(self, parent, upperparent):
 		tk.Tk.__init__(self, None)
+		self.parent=parent
 		self.upperparent=upperparent
 		self.bind('<Return>', self.submit)
 		self.protocol('WM_DELETE_WINDOW', lambda: parent.quit())
@@ -108,12 +109,12 @@ class MealsGUI(tk.Tk):
 	def create_window(self, classval):
 		self.withdraw()
 		print(classval)
-		self.window=MealGUI(None, self, classval)
+		self.window=MealGUI(self.parent, self, classval)
 
 class MealGUI(tk.Tk):
 	def __init__(self, parent, upperparent, mealtype):
 		print(mealtype)
-		tk.Tk.__init__(self, parent)
+		tk.Tk.__init__(self, None)
 		self.upperparent=upperparent
 		self.bind('<Return>', self.submit)
 		self.mealtype=mealtype
