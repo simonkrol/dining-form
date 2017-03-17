@@ -11,7 +11,7 @@ class InfoGUI(tk.Tk):
 		self.initialize()
 		self.upperparent=upperparent
 		self.parent=parent
-		self.protocol('WM_DELETE_WINDOW', self.parent.quit())  # root is your root window
+		self.protocol('WM_DELETE_WINDOW', lambda: parent.quit())  # root is your root window
 
 
 
@@ -82,7 +82,7 @@ class MealsGUI(tk.Tk):
 		tk.Tk.__init__(self, None)
 		self.upperparent=upperparent
 		self.bind('<Return>', self.submit)
-		self.protocol('WM_DELETE_WINDOW', self.parent.quit())
+		self.protocol('WM_DELETE_WINDOW', lambda: parent.quit())
 		self.initialize()
 
 
@@ -119,7 +119,7 @@ class MealGUI(tk.Tk):
 		self.mealtype=mealtype
 		self.BreakfastKey=['input_14', 'input_16', 'input_20']
 		self.LunchDinnerKey=['input_15', 'input_16', 'input_17', 'input_18', 'input_19', 'input_20']
-		self.protocol('WM_DELETE_WINDOW', self.parent.quit())
+		self.protocol('WM_DELETE_WINDOW', lambda: parent.quit())
 		self.initialize()
 
 	def initialize(self):
