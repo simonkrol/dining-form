@@ -25,7 +25,7 @@ To do:
 * Condense the stored meal information
 * Store user meals and retrieve them upon startup to block dates (DONE)
 * Send out email reminders when you need to pick up bagged lunches
-* Exit all frames upon any window close
+* Exit all frames upon any window close (DONE)
 * Add warning label to indicate what needs to be done, ie: info needs to be filled..etc
 >Version 1.4
 
