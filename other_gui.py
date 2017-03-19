@@ -171,6 +171,7 @@ class MealGUI(tk.Tk):
 
 	def submit(self, event=None):
 		self.val=[]
+		self.bind('<Return>', self.submit)
 		for i in range(self.numOptions):
 			self.val.append(self.var[i].get())
 		self.writeInfo()
