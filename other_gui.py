@@ -44,6 +44,10 @@ class InfoGUI(tk.Tk):
 		SubmitBtn.grid(row=len(labels), column=3, sticky='W', padx=5, pady=2)
 
 	def submit(self, event=None):
+		if(len(self.val)>2):
+			student=self.val[2]
+		else:
+			student=0
 		self.val=[]
 		for i in range(len(self.valtxt)):
 			if(self.valtxt[i].get()!=""):
@@ -52,7 +56,8 @@ class InfoGUI(tk.Tk):
 				return
 		self.upperparent.deiconify()
 		self.writeInfo()
-		self.parent.calendar._blocks()
+		if(self.val[2]!=student):
+			self.parent.calendar._blocks()
 		self.destroy()
 
 

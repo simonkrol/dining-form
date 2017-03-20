@@ -18,6 +18,7 @@ class MainApplication(tk.Frame):
 		self.radioFrame=tk.Frame(self)
 		self.buttonFrame=tk.Frame(self)
 		self.calendarFrame=tk.Frame(self)
+		self.labelFrame=tk.Frame(self)
 
 		self.parent.title("Calendar GUI")
 
@@ -30,9 +31,14 @@ class MainApplication(tk.Frame):
 		self.submit_button = tk.Button(self.buttonFrame, text="Send Requests", command=self.send_request)
 		self.submit_button.grid(row=1, column=2, padx=8, pady=2)
 
+		self.warning_text=tk.StringVar(self.labelFrame)
+		self.warning=tk.Label(self.labelFrame, textvariable=self.warning_text)
+		self.warning.grid(row=1, column=1, padx=8, pady=2)
+
 		self.radioFrame.grid(row=1)
 		self.calendarFrame.grid(row=2)
 		self.buttonFrame.grid(row=3)
+		self.labelFrame.grid(row=4)
 
 		MODES = [
 			("Breakfast", 1),
@@ -54,7 +60,7 @@ class MainApplication(tk.Frame):
 			style = ttk.Style()
 			style.theme_use('clam')
 	def create_window(self, classval):
-		
+		self.warning_text.set("")
 		command=('%s(self, self.parent)' %classval)
 		self.parent.withdraw()
 		self.window=eval(command)
@@ -83,13 +89,18 @@ class MainApplication(tk.Frame):
 		infile.close()
 
 
-	def send_request(self):	
+	def send_request(self):
+		self.warning_text.set("Yo")
 		dates=(self.calendar.selection())
-		if(dates==None):
+		print(dates)
+		if(dates==[]):
+			self.warning_text.set("No dates selected")
 			return
 		self.readInfo()
 		if(self.info=={} or self.meal=={}):
+			self.warning_text.set("Please make sure your info and meals are filled out")
 			return
+		self.warning_text.set("")
 		key=self.get_keys()
 		date={'input_5': "", 'input_6': self.mealType} #Generate dictionary representing the data and the type of meal being ordered
 		payload={**self.info, **self.meal, **key, **date}
