@@ -62,7 +62,7 @@ class Calendar(ttk.Frame):
 		self._calendar.bind('<Map>', self.__minsize)
 
 		self.canvi=[]
-		self._blocks()
+		self._blocks(True)
 
 	def __setup_styles(self):
 		# custom ttk styles
@@ -161,10 +161,11 @@ class Calendar(ttk.Frame):
 		self.canvi.append(newcanvas) #Append the canvas to a list of canvasses to be accessed when removal is required
 
 	#Delete all canvases within self
-	def _deletecanvas(self):
+	def _deletecanvas(self, chosen):
 		for i in self.canvi: 	#For each canvas stored on the frame
 			i.place_forget()	#Delete the canvas itself
-		self.days=[]		#Clear the lists storing days to be sent and current canvases
+		if(chosen):
+			self.days=[]		#Clear the lists storing days to be sent and current canvases
 		self.canvi=[]
 
 	def _unpressed(self, canvas):
@@ -211,7 +212,7 @@ class Calendar(ttk.Frame):
 		self._date = self._date - self.timedelta(days=1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
 		self._build_calendar() # reconstuct calendar
-		self._blocks()
+		self._blocks(True)
 
 	def _next_month(self):
 		
@@ -222,11 +223,11 @@ class Calendar(ttk.Frame):
 			days=calendar.monthrange(year, month)[1] + 1)
 		self._date = self.datetime(self._date.year, self._date.month, 1)
 		self._build_calendar() # reconstruct calendar
-		self._blocks()
+		self._blocks(True)
 
 
-	def _blocks(self):
-		self._deletecanvas() #Delete all canvases currently on the frame
+	def _blocks(self, chosen):
+		self._deletecanvas(chosen) #Delete all canvases currently on the frame
 		meal=int(self.v.get())	#Find the current meal
 		infile=open_data('data', 'info.dat', 'r')
 		lines=infile.readlines()
@@ -237,14 +238,21 @@ class Calendar(ttk.Frame):
 		studentNum=split[1]
 		infile=open_data('data', 'dates.dat', 'r') #Open the dates file to find meals needing to be blocked
 		for line in infile: #Parse file and block meals
-			split=line.split()
-			if(split[2]==studentNum):
-				if(int(split[0])==meal):
-					split=split[1].split('/')
+			majorsplit=line.split()
+			if(majorsplit[2]==studentNum):
+				if(int(majorsplit[0])==meal):
+					split=majorsplit[1].split('/')
 					if(int(split[2])==self._date.year and int(split[0])==self._date.month):
+						if(majorsplit[1] in self.days):
+							self.days.remove(majorsplit[1])
 						self.placecanvas(split[1],False, '#DC143C', self.sel_fg)		#Place a non-removable canvas with colour red
 		infile.close()
-
+		if(not chosen):
+			for day in self.days:
+				split=day.split('/')
+				self.placecanvas(split[1], False, self.sel_bg, self.sel_fg) #Place the canvases back on the frame, non-removable because they already exist in self.days
+	
+		
 	def selection(self):
 		"""Return a list of strings representing all currently selected days"""
 		return self.days

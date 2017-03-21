@@ -27,8 +27,8 @@ To do:
 * Send out email reminders when you need to pick up bagged lunches(Would need some sort of server)
 * Exit all frames upon any window close (DONE)
 * Add warning label to indicate what needs to be done, ie: info needs to be filled..etc (DONE)
-* Don't remove chosen dates when switching between meals and student numbers
->Version 1.4
+* Don't remove chosen dates when switching between meals and student numbers (DONE)
+>Version 1.5
 
 To Run (Windows)
 Download or clone the repository

@@ -57,7 +57,7 @@ class InfoGUI(tk.Tk):
 		self.upperparent.deiconify()
 		self.writeInfo()
 		if(self.val[2]!=student):
-			self.parent.calendar._blocks()
+			self.parent.calendar._blocks(False)
 		self.destroy()
 
 

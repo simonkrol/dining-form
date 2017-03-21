@@ -50,7 +50,7 @@ class MainApplication(tk.Frame):
 		self.v.set(1) # initialize
 
 		for text, mode in MODES:
-			b = tk.Radiobutton(self.radioFrame, text=text, variable=self.v, value=mode, indicatoron=0, command=self.reset_blocks)
+			b = tk.Radiobutton(self.radioFrame, text=text, variable=self.v, value=mode, indicatoron=0, command=lambda: self.reset_blocks(False))
 			b.grid(row=0, sticky='S', column=mode, padx=8, pady=2)
 
 		self.calendar=Calendar( self.v, self.calendarFrame, firstweekday=calendar.SUNDAY, )
@@ -113,14 +113,14 @@ class MainApplication(tk.Frame):
 			print(date)
 			#r=requests.post(url, data=payload) #Commented out so as not to send a ton of requests while testing
 		infile.close()
-		self.reset_blocks()
+		self.reset_blocks(True)
 
 
 	def get_keys(self):
 		return {'is_submit_3':'1', 'gform_submit':'3', 'state_3':'WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0='}
 	
-	def reset_blocks(self):
-		self.calendar._blocks()
+	def reset_blocks(self, chosen):
+		self.calendar._blocks(chosen)
 
 
 
