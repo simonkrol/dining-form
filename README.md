@@ -21,7 +21,7 @@ To do:
 * Make meal blocking user specific, based on student number (DONE)
 * Add special request capability (DONE)
 * Prevent meals in the past from being ordered
-* Remove dates stored in the past from dat file?
+* Remove dates stored in the past from dat file? (DONE)
 * Condense the stored meal information
 * Store user meals and retrieve them upon startup to block dates (DONE)
 * Send out email reminders when you need to pick up bagged lunches(Would need some sort of server)

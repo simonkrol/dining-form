@@ -1,7 +1,7 @@
 import tkinter as tk
 from gui_calendar import Calendar
 from other_gui import InfoGUI, MealsGUI
-from lunch_methods import open_data
+from lunch_methods import open_data, clean_dates
 import calendar
 import requests
 import tkinter.font
@@ -14,6 +14,8 @@ class MainApplication(tk.Frame):
 		tk.Frame.__init__(self, parent, *args, **kwargs)
 		#self.keyorder=['input_1.3', 'input_1.6', 'input_2', 'input_3', 'input_4']
 		self.parent = parent
+
+
 
 		self.radioFrame=tk.Frame(self)
 		self.buttonFrame=tk.Frame(self)
@@ -116,6 +118,7 @@ class MainApplication(tk.Frame):
 		self.reset_blocks(True)
 
 
+
 	def get_keys(self):
 		return {'is_submit_3':'1', 'gform_submit':'3', 'state_3':'WyJbXSIsImQ0NjBmMzhkZDZiMGJmYmI3NDI2NDA0YTZkNTIxNzhkIl0='}
 	
@@ -124,9 +127,11 @@ class MainApplication(tk.Frame):
 
 
 
+
 if __name__ == "__main__":
 	root = tk.Tk()
 	MainApplication(root).grid(row=5, sticky='N', padx=8, pady=2)#pack(side="top", fill="both", expand=True)
+	clean_dates()
 	root.mainloop()
 
 
