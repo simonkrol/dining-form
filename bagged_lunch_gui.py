@@ -12,6 +12,7 @@ import os
 class MainApplication(tk.Frame):
 	def __init__(self, parent, *args, **kwargs):
 		tk.Frame.__init__(self, parent, *args, **kwargs)
+		clean_dates()
 		#self.keyorder=['input_1.3', 'input_1.6', 'input_2', 'input_3', 'input_4']
 		self.parent = parent
 
@@ -131,7 +132,6 @@ class MainApplication(tk.Frame):
 if __name__ == "__main__":
 	root = tk.Tk()
 	MainApplication(root).grid(row=5, sticky='N', padx=8, pady=2)#pack(side="top", fill="both", expand=True)
-	clean_dates()
 	root.mainloop()
 
 

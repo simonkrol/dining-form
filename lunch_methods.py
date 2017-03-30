@@ -24,7 +24,7 @@ def clean_dates():
 		print(day)
 		if(int(day[2])<=today.year):
 			if(int(day[0])<=today.month):
-				if(int(day[1])<today.day):
+				if(int(day[1])<(today.day-1)):
 					remove.append(split[1])
 	infile.close()
 	infile=open('data/dates.dat', 'w')
