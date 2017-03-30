@@ -228,6 +228,21 @@ class Calendar(ttk.Frame):
 
 	def _blocks(self, chosen):
 		self._deletecanvas(chosen) #Delete all canvases currently on the frame
+		remove=[]
+		today = datetime.datetime.now()
+		if(self._date.year<today.year):
+			for i in range(1, calendar.monthrange(self._date.year, self._date.month)[1]+1):
+				self.placecanvas(i,False, '#F7BE81', self.sel_fg)
+		elif(self._date.year==today.year):
+			if(self._date.month<today.month):
+				for i in range(1, calendar.monthrange(self._date.year, self._date.month)[1]+1):
+					self.placecanvas(i,False, '#F7BE81', self.sel_fg)
+			elif(self._date.month==today.month):
+				print(today.day)
+				for i in range(1, today.day+1):
+					print(i)
+					self.placecanvas(i,False, '#F7BE81', self.sel_fg)
+
 		meal=int(self.v.get())	#Find the current meal
 		infile=open_data('data', 'info.dat', 'r')
 		lines=infile.readlines()
@@ -251,7 +266,7 @@ class Calendar(ttk.Frame):
 			for day in self.days:
 				split=day.split('/')
 				self.placecanvas(split[1], False, self.sel_bg, self.sel_fg) #Place the canvases back on the frame, non-removable because they already exist in self.days
-	
+		
 		
 	def selection(self):
 		"""Return a list of strings representing all currently selected days"""
