@@ -138,8 +138,7 @@ class Calendar(ttk.Frame):
 
 		weekday=((newdate.isoweekday())%7)								#get day of week(0-6)
 		weeknum=(int((newdate.day-1)/7))									#get which week the day falls on
-
-		if(weekday<(datetime.date(newdate.year, newdate.month, 1)).isoweekday()):	#account for weeks starting on different day
+		if(weekday<(datetime.date(newdate.year, newdate.month, 1)).isoweekday()%7):	#account for weeks starting on different day
 			weeknum+=1																#adding one to the week count if the current day is earlier in the calendar than the first of the month
 
 		x, y, width, height = ((33*weekday)+1,(20*weeknum)+21,33,20)	#generate coordinates
@@ -232,16 +231,14 @@ class Calendar(ttk.Frame):
 		today = datetime.datetime.now()
 		if(self._date.year<today.year):
 			for i in range(1, calendar.monthrange(self._date.year, self._date.month)[1]+1):
-				self.placecanvas(i,False, '#F7BE81', self.sel_fg)
+				self.placecanvas(i,False, '#F7FE2E', self.sel_fg)
 		elif(self._date.year==today.year):
 			if(self._date.month<today.month):
 				for i in range(1, calendar.monthrange(self._date.year, self._date.month)[1]+1):
-					self.placecanvas(i,False, '#F7BE81', self.sel_fg)
+					self.placecanvas(i,False, '#F7FE2E', self.sel_fg)
 			elif(self._date.month==today.month):
-				print(today.day)
 				for i in range(1, today.day+1):
-					print(i)
-					self.placecanvas(i,False, '#F7BE81', self.sel_fg)
+					self.placecanvas(i,False, '#F7FE2E', self.sel_fg)
 
 		meal=int(self.v.get())	#Find the current meal
 		infile=open_data('data', 'info.dat', 'r')
