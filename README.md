@@ -20,7 +20,7 @@ To do:
 * Block the requesting of meals that have already been requested (DONE)
 * Make meal blocking user specific, based on student number (DONE)
 * Add special request capability (DONE)
-* Prevent meals in the past from being ordered
+* Prevent meals in the past from being ordered(DONE)
 * Remove dates stored in the past from dat file? (DONE)
 * Condense the stored meal information
 * Store user meals and retrieve them upon startup to block dates (DONE)
@@ -28,7 +28,7 @@ To do:
 * Exit all frames upon any window close (DONE)
 * Add warning label to indicate what needs to be done, ie: info needs to be filled..etc (DONE)
 * Don't remove chosen dates when switching between meals and student numbers (DONE)
->Version 1.5
+>Version 1.6
 
 To Run (Windows)
 Download or clone the repository
