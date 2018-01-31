@@ -6,7 +6,7 @@ An easier way to send Fresh Food Company's bagged meal requests.
 - Python
 - Tkinter
 
-Includes a clickable calendar GUI which allows users to choose dates to post bagged meal requests to the Fresh Food Company. 
+Includes a clickable calendar GUI which allows users to choose dates to post bagged meal requests to the Fresh Food Company. Original non-clickable calendar from metulburr on python-forum.io.
 
 ### Options
 - choose between breakfast, lunch or dinner 
